@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOMENTS. — Share</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Design System Tokens --- */
+        :root {
+            --background: #FFFFFF;
+            --surface: #F5F7FF;
+            --blue-primary: #1A56FF;
+            --blue-soft: #E8EEFF;
+            --ink: #0A0A0F;
+            --muted: #6B7280;
+            --border: #E2E6F0;
+            --danger: #EF4444;
+            
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --background: #0A0A0F;
+            --surface: #13131A;
+            --blue-primary: #3D6FFF;
+            --blue-soft: #1A1F3A;
+            --ink: #F0F0F5;
+            --muted: #9CA3AF;
+            --border: #1E1E2E;
+            --danger: #F87171;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), 
+                        border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                        color 150ms ease;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--background);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Global Header Layout --- */
+        header {
+            height: 64px;
+            width: 100%;
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background-color: var(--background);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--blue-primary);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            background-color: var(--surface);
+            color: var(--danger);
+        }
+
+        /* --- Create Form Structure --- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .create-wrapper {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .identity-badge {
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Borderless, Auto-Expanding Text Frame */
+        .moment-input-area {
+            width: 100%;
+            min-height: 160px;
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--ink);
+            background: transparent;
+            border: none;
+            resize: none;
+            outline: none;
+            margin-bottom: 32px;
+        }
+
+        .moment-input-area::placeholder {
+            color: var(--border);
+        }
+
+        [data-theme="dark"] .moment-input-area::placeholder {
+            color: #242433;
+        }
+
+        /* System Action Bar */
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            margin-top: auto;
+        }
+
+        .counter {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .counter.limit-warning {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .publish-btn {
+            background-color: var(--blue-primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .publish-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .error-banner {
+            font-size: 13px;
+            color: var(--danger);
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="feed.html" class="logo">MOMENTS<span>.</span></a>
+        <button class="close-btn" id="exitBtn" aria-label="Cancel context creation">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </header>
+
+    <main>
+        <div class="create-wrapper">
+            <div class="identity-badge" id="identityBadge">Connecting...</div>
+            <div id="errorBanner" class="error-banner"></div>
+            
+            <textarea 
+                id="momentText" 
+                class="moment-input-area" 
+                placeholder="What honest thought are you holding onto right now?"
+                maxlength="300"
+            ></textarea>
+            
+            <div class="form-footer">
+                <span class="counter" id="counter">0 / 300</span>
+                <button id="publishBtn" class="publish-btn" disabled>Share Moment</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        import { firebaseConfig } from "./js/firebase.js";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const momentText = document.getElementById('momentText');
+        const counter = document.getElementById('counter');
+        const publishBtn = document.getElementById('publishBtn');
+        const identityBadge = document.getElementById('identityBadge');
+        const errorBanner = document.getElementById('errorBanner');
+        const exitBtn = document.getElementById('exitBtn');
+
+        let profileUsername = "";
+
+        // Session Access Protection Layer
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "/register";
+                return;
+            }
+
+            try {
+                const profileRef = await getDoc(doc(db, "users", user.uid));
+                if (!profileRef.exists()) {
+                    window.location.href = "/register";
+                    return;
+                }
+                
+                profileUsername = profileRef.data().username;
+                identityBadge.textContent = `Posting anonymously as @${profileUsername}`;
+            } catch (err) {
+                console.error("Session verification failure: ", err);
+                window.location.href = "/register";
+            }
+        });
+
+        // Dynamic Sizing Control & Character Tracing Rule
+        momentText.addEventListener('input', () => {
+            momentText.style.height = 'auto';
+            momentText.style.height = `${momentText.scrollHeight}px`;
+
+            const len = momentText.value.length;
+            counter.textContent = `${len} / 300`;
+
+            if (len >= 275) {
+                counter.classList.add('limit-warning');
+            } else {
+                counter.classList.remove('limit-warning');
+            }
+
+            const cleanValue = momentText.value.trim();
+            publishBtn.disabled = cleanValue.length === 0 || len > 300;
+        });
+
+        // Fire Transaction Submissions Handler
+        publishBtn.addEventListener('click', async () => {
+            const outputText = momentText.value.trim();
+            if (!outputText || !profileUsername) return;
+
+            setSubmissionState(true);
+            errorBanner.style.display = 'none';
+
+            try {
+                await addDoc(collection(db, "moments"), {
+                    username: profileUsername,
+                    content: outputText,
+                    createdAt: serverTimestamp()
+                });
+
+                window.location.href = "feed.html";
+
+            } catch (err) {
+                console.error("Document append error: ", err);
+                errorBanner.textContent = "Could not share your moment. Check your connection.";
+                errorBanner.style.display = 'block';
+                setSubmissionState(false);
+            }
+        });
+
+        exitBtn.addEventListener('click', () => {
+            window.location.href = "feed.html";
+        });
+
+        function setSubmissionState(isPending) {
+            if (isPending) {
+                publishBtn.disabled = true;
+                publishBtn.textContent = "Sharing...";
+                momentText.disabled = true;
+            } else {
+                publishBtn.disabled = false;
+                publishBtn.textContent = "Share Moment";
+                momentText.disabled = false;
+            }
+        }
+    </script>
+
+    <script>
+        const activeTheme = localStorage.getItem('moments-theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', activeTheme);
+    </script>
+</body>
+</html>

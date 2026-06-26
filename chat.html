@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOMENTS. — Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #FFFFFF;
+            --surface: #F4F5F8;
+            --blue-primary: #1A56FF;
+            --ink: #0A0A0F;
+            --muted: #71717A;
+            --border: #E4E4E7;
+            --font-display: 'Syne', sans-serif;
+        }
+        [data-theme="dark"] {
+            --background: #0A0A0F;
+            --surface: #18181B;
+            --blue-primary: #3D6FFF;
+            --ink: #F4F4F5;
+            --muted: #A1A1AA;
+            --border: #27272A;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--background); color: var(--ink); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+        header {
+            height: 64px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            background: var(--background);
+            flex-shrink: 0;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 12px; }
+
+        .back-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, color 0.15s;
+        }
+        .back-btn:hover { background: var(--surface); color: var(--ink); }
+
+        .peer-info { display: flex; flex-direction: column; }
+        .peer-name { font-family: var(--font-display); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .peer-status { font-size: 11px; color: #22C55E; font-weight: 600; display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+        .status-dot { width: 6px; height: 6px; background: #22C55E; border-radius: 50%; }
+
+        .header-right { display: flex; align-items: center; gap: 8px; }
+
+        .theme-toggle-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+        }
+        .theme-toggle-btn:hover { background: var(--surface); color: var(--ink); }
+
+        .leave-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            transition: all 0.15s;
+        }
+        .leave-btn:hover { color: #EF4444; border-color: #EF4444; background: rgba(239,68,68,0.05); }
+
+        .context-banner {
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--muted);
+            background: var(--surface);
+            line-height: 1.5;
+            flex-shrink: 0;
+        }
+        .context-banner strong { color: var(--blue-primary); font-weight: 600; }
+
+        .chat-window {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            scroll-behavior: smooth;
+        }
+
+        .msg-row { display: flex; flex-direction: column; }
+        .msg-row.me { align-items: flex-end; }
+        .msg-row.them { align-items: flex-start; }
+
+        .msg {
+            max-width: 72%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14.5px;
+            line-height: 1.45;
+            word-break: break-word;
+            animation: popIn 0.18s ease-out;
+        }
+        @keyframes popIn { from { transform: scale(0.95) translateY(4px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+        .msg-row.me .msg { background: var(--blue-primary); color: #FFFFFF; border-bottom-right-radius: 4px; }
+        .msg-row.them .msg { background: var(--surface); color: var(--ink); border-bottom-left-radius: 4px; }
+
+        .msg-time { font-size: 10px; color: var(--muted); margin-top: 3px; padding: 0 4px; }
+
+        .input-area {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            background: var(--background);
+            flex-shrink: 0;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 6px 6px 6px 16px;
+            transition: border-color 0.2s;
+        }
+        .input-row:focus-within { border-color: var(--blue-primary); }
+
+        .input-row input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 14.5px;
+            color: var(--ink);
+            padding: 6px 0;
+        }
+        .input-row input::placeholder { color: var(--muted); opacity: 0.7; }
+
+        .send-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--blue-primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.1s, opacity 0.15s;
+        }
+        .send-btn:hover { opacity: 0.85; }
+        .send-btn:active { transform: scale(0.92); }
+        .send-btn svg { width: 16px; height: 16px; fill: currentColor; transform: translateX(1px); }
+
+        @media (min-width: 768px) {
+            body { max-width: 600px; margin: 0 auto; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <button class="back-btn" onclick="window.location.href='/feed.html'" aria-label="Back to feed">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <div class="peer-info">
+                <span class="peer-name" id="peerLabel">Room</span>
+                <span class="peer-status"><span class="status-dot"></span>Active session</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+                <svg id="themeIcon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"></svg>
+            </button>
+            <button class="leave-btn" id="endBtn">End</button>
+        </div>
+    </header>
+
+    <div class="context-banner" id="contextBanner"></div>
+
+    <div class="chat-window" id="chatWindow"></div>
+
+    <div class="input-area">
+        <div class="input-row">
+            <input type="text" id="msgInput" placeholder="Write authentically..." autocomplete="off" />
+            <button class="send-btn" id="sendBtn" aria-label="Send">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { firebaseConfig } from "./js/firebase.js";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const rtdb = getDatabase(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('id');
+        const peerName = urlParams.get('peer');
+        const rawPostContext = urlParams.get('post');
+
+        const chatWindow = document.getElementById('chatWindow');
+        const msgInput = document.getElementById('msgInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const peerLabel = document.getElementById('peerLabel');
+        const endBtn = document.getElementById('endBtn');
+        const contextBanner = document.getElementById('contextBanner');
+
+        let myUid = "";
+
+        if (!chatId) { window.location.href = "/feed.html"; }
+
+        peerLabel.textContent = peerName ? `@${peerName}` : "Connected Mind";
+
+        // THE FIX: say "connected over this moment" not "via link"
+        if (rawPostContext && decodeURIComponent(rawPostContext).trim() !== "") {
+            contextBanner.innerHTML = `You both connected over this moment: <strong>"${decodeURIComponent(rawPostContext)}"</strong>`;
+        } else {
+            contextBanner.textContent = "Connected via anonymous blind pairing.";
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) { window.location.href = "/register"; return; }
+            myUid = user.uid;
+            initializeChatStream();
+        });
+
+        function initializeChatStream() {
+            const messagesRef = ref(rtdb, `chats/${chatId}/messages`);
+            const statusRef = ref(rtdb, `chats/${chatId}/status`);
+
+            onChildAdded(messagesRef, (snapshot) => {
+                const data = snapshot.val();
+                renderMessage(data.text, data.sender === myUid, data.timestamp);
+            });
+
+            onValue(statusRef, (snapshot) => {
+                if (snapshot.val() === "ended") {
+                    alert("This session has ended.");
+                    window.location.href = "/feed.html";
+                }
+            });
+        }
+
+        async function sendMessage() {
+            const text = msgInput.value.trim();
+            if (!text) return;
+            msgInput.value = "";
+            const messagesRef = ref(rtdb, `chats/${chatId}/messages`);
+            await push(messagesRef, { sender: myUid, text, timestamp: Date.now() });
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        msgInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        });
+
+        endBtn.addEventListener('click', async () => {
+            if (confirm("End this session?")) {
+                await set(ref(rtdb, `chats/${chatId}/status`), "ended");
+            }
+        });
+
+        function renderMessage(text, isMe, timestamp) {
+            const row = document.createElement('div');
+            row.className = `msg-row ${isMe ? 'me' : 'them'}`;
+            const timeStr = timestamp
+                ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                : '';
+            row.innerHTML = `
+                <div class="msg">${escapeHtml(text)}</div>
+                ${timeStr ? `<span class="msg-time">${timeStr}</span>` : ''}
+            `;
+            chatWindow.appendChild(row);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+    </script>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const saved = localStorage.getItem('moments-theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', saved);
+        setIcon(saved);
+
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('moments-theme', next);
+            setIcon(next);
+        });
+
+        function setIcon(t) {
+            themeIcon.innerHTML = t === 'dark'
+                ? `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`
+                : `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+        }
+    </script>
+</body>
+</html>

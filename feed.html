@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOMENTS. — Feed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #FFFFFF;
+            --surface: #F5F7FF;
+            --blue-primary: #1A56FF;
+            --blue-soft: #E8EEFF;
+            --ink: #0A0A0F;
+            --muted: #6B7280;
+            --border: #E2E6F0;
+            --danger: #EF4444;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        [data-theme="dark"] {
+            --background: #0A0A0F;
+            --surface: #13131A;
+            --blue-primary: #3D6FFF;
+            --blue-soft: #1A1F3A;
+            --ink: #F0F0F5;
+            --muted: #9CA3AF;
+            --border: #1E1E2E;
+            --danger: #F87171;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 200ms cubic-bezier(0.4,0,0.2,1), border-color 200ms cubic-bezier(0.4,0,0.2,1), color 150ms ease; }
+        body { font-family: var(--font-body); background-color: var(--background); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; }
+
+        header { height: 64px; width: 100%; padding: 0 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; background-color: var(--background); z-index: 1000; }
+        .logo { font-family: var(--font-display); font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--ink); text-decoration: none; }
+        .logo span { color: var(--blue-primary); }
+        .nav-actions { display: flex; align-items: center; gap: 16px; }
+        .theme-toggle-btn { background: transparent; border: none; cursor: pointer; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--ink); border-radius: 50%; }
+        .theme-toggle-btn:hover { background-color: var(--surface); }
+        .share-btn { background-color: var(--blue-primary); color: #FFFFFF; border: none; border-radius: 6px; padding: 8px 16px; font-family: var(--font-display); font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase; }
+
+        main { width: 100%; max-width: 600px; margin: 0 auto; padding: 40px 24px 120px 24px; flex: 1; }
+
+        .spotlight-card { background: var(--surface); border-radius: 12px; padding: 28px; margin-bottom: 40px; border-left: 3px solid var(--blue-primary); }
+        .spotlight-tag { font-family: var(--font-display); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--blue-primary); margin-bottom: 8px; display: block; }
+        .spotlight-text { font-family: var(--font-display); font-size: 18px; font-weight: 600; line-height: 1.5; color: var(--ink); }
+
+        .moment-card { background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px; }
+        .card-meta { display: flex; justify-content: space-between; align-items: center; }
+        .author-tag { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--blue-primary); }
+        .timestamp { font-size: 12px; color: var(--muted); }
+        .card-content { font-family: var(--font-display); font-size: 16px; font-weight: 600; line-height: 1.5; color: var(--ink); word-break: break-word; }
+
+        .card-actions { display: flex; gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+        .action-btn { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: background 0.15s, color 0.15s; }
+        .action-btn:hover { background-color: var(--surface); color: var(--blue-primary); }
+        .like-btn.liked { color: var(--danger); }
+        .like-btn.liked svg { fill: var(--danger); stroke: var(--danger); }
+        .connect-btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+        .feed-status { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
+
+        .match-bar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: calc(100% - 48px); max-width: 552px; background: var(--ink); color: var(--background); padding: 16px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 32px rgba(0,0,0,0.15); z-index: 999; }
+        .match-info h4 { font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0.3px; }
+        .match-info p { font-size: 12px; opacity: 0.6; margin-top: 2px; }
+        .match-btn { background-color: var(--blue-primary); color: #FFFFFF; border: none; border-radius: 6px; padding: 10px 16px; font-family: var(--font-display); font-weight: 700; font-size: 12px; text-transform: uppercase; cursor: pointer; text-decoration: none; letter-spacing: 0.5px; }
+
+        .skeleton-stream { display: flex; flex-direction: column; gap: 16px; }
+        .skeleton-card { background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+        .skeleton-bone { background: var(--surface); border-radius: 4px; animation: pulseWave 1.8s cubic-bezier(0.4,0,0.6,1) infinite; }
+        .bone-meta-left { width: 90px; height: 14px; }
+        .bone-meta-right { width: 65px; height: 12px; }
+        .bone-content-1 { width: 100%; height: 18px; margin-top: 4px; }
+        .bone-content-2 { width: 85%; height: 18px; }
+        .bone-actions { width: 140px; height: 16px; border-radius: 6px; margin-top: 8px; }
+        .skeleton-card:nth-child(2) .skeleton-bone { animation-delay: 0.2s; }
+        .skeleton-card:nth-child(3) .skeleton-bone { animation-delay: 0.4s; }
+        @keyframes pulseWave { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="feed.html" class="logo">MOMENTS<span>.</span></a>
+        <div class="nav-actions">
+            <a href="create.html" class="share-btn">+ Share</a>
+            <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+                <svg id="themeIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"></svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="spotlight-card">
+            <span class="spotlight-tag">Moment of the Week</span>
+            <div class="spotlight-text">"The quietest thoughts are often the ones we carry together."</div>
+        </section>
+
+        <div id="timelineStream">
+            <div class="skeleton-stream">
+                <div class="skeleton-card">
+                    <div class="card-meta">
+                        <div class="skeleton-bone bone-meta-left"></div>
+                        <div class="skeleton-bone bone-meta-right"></div>
+                    </div>
+                    <div class="skeleton-bone bone-content-1"></div>
+                    <div class="skeleton-bone bone-content-2"></div>
+                    <div class="skeleton-bone bone-actions"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="card-meta">
+                        <div class="skeleton-bone bone-meta-left"></div>
+                        <div class="skeleton-bone bone-meta-right"></div>
+                    </div>
+                    <div class="skeleton-bone bone-content-1"></div>
+                    <div class="skeleton-bone bone-actions"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="card-meta">
+                        <div class="skeleton-bone bone-meta-left"></div>
+                        <div class="skeleton-bone bone-meta-right"></div>
+                    </div>
+                    <div class="skeleton-bone bone-content-1"></div>
+                    <div class="skeleton-bone bone-content-2"></div>
+                    <div class="skeleton-bone bone-actions"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="match-bar">
+        <div class="match-info">
+            <h4>Need a real conversation?</h4>
+            <p>Connect with an anonymous mind instantly.</p>
+        </div>
+        <a href="match.html" class="match-btn">Talk</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            query,
+            where,
+            orderBy,
+            onSnapshot,
+            getDocs,
+            getDoc,
+            doc,
+            addDoc,
+            updateDoc,
+            increment
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { firebaseConfig } from "./js/firebase.js";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const timelineStream = document.getElementById('timelineStream');
+
+        let currentUser = null;
+        let myUsername = "";
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { window.location.href = "/register"; return; }
+            currentUser = user;
+
+            // getDoc with doc() — this is the correct way to fetch by UID
+            const myDocSnap = await getDoc(doc(db, "users", user.uid));
+            if (!myDocSnap.exists()) { window.location.href = "/register"; return; }
+            myUsername = myDocSnap.data().username;
+
+            startIncomingChatListener(user.uid);
+            startTimelinePipeline();
+        });
+
+        function startIncomingChatListener(myUid) {
+            const incomingQuery = query(
+                collection(db, "directChats"),
+                where("targetUid", "==", myUid),
+                where("status", "==", "pending")
+            );
+
+            onSnapshot(incomingQuery, async (snapshot) => {
+                if (!snapshot.empty) {
+                    const inviteDoc = snapshot.docs[0];
+                    const inviteData = inviteDoc.data();
+                    const chatId = inviteDoc.id;
+
+                    await updateDoc(doc(db, "directChats", chatId), { status: "active" });
+
+                    window.location.href = `/chat.html?id=${chatId}&peer=${encodeURIComponent(inviteData.senderUsername)}&post=${encodeURIComponent(inviteData.contextPost || "")}`;
+                }
+            });
+        }
+
+        function startTimelinePipeline() {
+            const feedQuery = query(collection(db, "moments"), orderBy("createdAt", "desc"));
+
+            onSnapshot(feedQuery, (snapshot) => {
+                timelineStream.innerHTML = "";
+
+                if (snapshot.empty) {
+                    timelineStream.innerHTML = `<div class="feed-status">Nothing shared yet. Break the ice.</div>`;
+                    return;
+                }
+
+                snapshot.forEach((docEntry) => {
+                    const data = docEntry.data();
+
+                    let timeDisplay = "Just now";
+                    if (data.createdAt) {
+                        timeDisplay = new Date(data.createdAt.seconds * 1000).toLocaleDateString(undefined, {
+                            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                        });
+                    }
+
+                    const parsedUsername = safeParse(data.username);
+                    const parsedContent = safeParse(data.content);
+                    const isOwn = data.username === myUsername;
+
+                    const card = document.createElement('article');
+                    card.className = 'moment-card';
+                    card.innerHTML = `
+                        <div class="card-meta">
+                            <span class="author-tag">@${parsedUsername}</span>
+                            <span class="timestamp">${timeDisplay}</span>
+                        </div>
+                        <div class="card-content">${parsedContent}</div>
+                        <div class="card-actions">
+                            <button class="action-btn like-btn" data-id="${docEntry.id}">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                                <span class="like-count">${data.likesCount || 0}</span>
+                            </button>
+                            ${!isOwn ? `
+                            <button class="action-btn connect-btn"
+                                data-username="${parsedUsername}"
+                                data-content="${parsedContent}">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                </svg>
+                                Connect
+                            </button>` : ''}
+                        </div>
+                    `;
+                    timelineStream.appendChild(card);
+                });
+
+            }, (err) => {
+                console.error("Feed error:", err);
+                timelineStream.innerHTML = `<div class="feed-status">Error loading feed.</div>`;
+            });
+        }
+
+        timelineStream.addEventListener('click', async (e) => {
+
+            // Like handler
+            const likeBtn = e.target.closest('.like-btn');
+            if (likeBtn) {
+                const momentId = likeBtn.dataset.id;
+                likeBtn.classList.toggle('liked');
+                const isLiked = likeBtn.classList.contains('liked');
+                const countEl = likeBtn.querySelector('.like-count');
+                const prev = parseInt(countEl.textContent) || 0;
+                countEl.textContent = isLiked ? prev + 1 : Math.max(0, prev - 1);
+                try {
+                    await updateDoc(doc(db, "moments", momentId), { likesCount: increment(isLiked ? 1 : -1) });
+                } catch {
+                    likeBtn.classList.toggle('liked');
+                    countEl.textContent = prev;
+                }
+                return;
+            }
+
+            // Connect handler
+            const connectBtn = e.target.closest('.connect-btn');
+            if (!connectBtn) return;
+            if (!currentUser || !myUsername) return;
+
+            const targetUsername = connectBtn.dataset.username;
+            const postContent = connectBtn.dataset.content;
+
+            connectBtn.disabled = true;
+            connectBtn.textContent = "Connecting...";
+
+            try {
+                // Find target user's UID by their username field
+                const targetSnap = await getDocs(
+                    query(collection(db, "users"), where("username", "==", targetUsername))
+                );
+
+                if (targetSnap.empty) {
+                    connectBtn.disabled = false;
+                    connectBtn.textContent = "Connect";
+                    return;
+                }
+
+                const targetUid = targetSnap.docs[0].id;
+
+                // Create directChat invite doc
+                const chatRef = await addDoc(collection(db, "directChats"), {
+                    senderUid: currentUser.uid,
+                    senderUsername: myUsername,
+                    targetUid: targetUid,
+                    targetUsername: targetUsername,
+                    contextPost: postContent,
+                    status: "pending",
+                    createdAt: new Date()
+                });
+
+                // Sender goes to chat immediately
+                // Post author gets routed by startIncomingChatListener on their end
+                window.location.href = `/chat.html?id=${chatRef.id}&peer=${encodeURIComponent(targetUsername)}&post=${encodeURIComponent(postContent)}`;
+
+            } catch (err) {
+                console.error("Connect error:", err);
+                connectBtn.disabled = false;
+                connectBtn.textContent = "Connect";
+            }
+        });
+
+        function safeParse(text) {
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+    </script>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const saved = localStorage.getItem('moments-theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', saved);
+        setIcon(saved);
+
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('moments-theme', next);
+            setIcon(next);
+        });
+
+        function setIcon(t) {
+            themeIcon.innerHTML = t === 'dark'
+                ? `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`
+                : `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+        }
+    </script>
+</body>
+</html>

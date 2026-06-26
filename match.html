@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOMENTS. — Connecting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Syne:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #FFFFFF;
+            --surface: #F5F7FF;
+            --ink: #0A0A0F;
+            --muted: #6B7280;
+            --border: #E2E6F0;
+            --blue-primary: #1A56FF;
+            --font-display: 'Syne', sans-serif;
+        }
+        [data-theme="dark"] {
+            --background: #0A0A0F;
+            --surface: #13131A;
+            --ink: #F0F0F5;
+            --muted: #9CA3AF;
+            --border: #1E1E2E;
+            --blue-primary: #3D6FFF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--ink);
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            height: 64px;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .logo { font-family: var(--font-display); font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--ink); text-decoration: none; }
+        .logo span { color: var(--blue-primary); }
+
+        .header-right { display: flex; align-items: center; gap: 8px; }
+
+        .theme-toggle-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--muted);
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+        }
+        .theme-toggle-btn:hover { background: var(--surface); color: var(--ink); }
+
+        .cancel-btn {
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: var(--muted);
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .cancel-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+        /* Center content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        /* Animated rings */
+        .pulse-rings {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 40px;
+        }
+
+        .ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid var(--blue-primary);
+            opacity: 0;
+            animation: ringPulse 2.4s ease-out infinite;
+        }
+        .ring:nth-child(2) { animation-delay: 0.8s; }
+        .ring:nth-child(3) { animation-delay: 1.6s; }
+
+        @keyframes ringPulse {
+            0% { transform: scale(0.4); opacity: 0.8; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        .ring-center {
+            position: absolute;
+            inset: 50%;
+            transform: translate(-50%, -50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--blue-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ring-center svg { color: #fff; }
+
+        .status-heading {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+        }
+
+        .status-sub {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.5;
+            max-width: 280px;
+        }
+
+        .status-sub strong {
+            color: var(--blue-primary);
+            font-weight: 600;
+        }
+
+        /* Waiting dots */
+        .waiting-dots { display: inline-flex; gap: 4px; align-items: center; margin-top: 24px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-primary); opacity: 0.3; animation: dotBlink 1.4s infinite; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotBlink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        .queue-note {
+            margin-top: 40px;
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .queue-dot { width: 6px; height: 6px; border-radius: 50%; background: #22C55E; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="feed.html" class="logo">MOMENTS<span>.</span></a>
+        <div class="header-right">
+            <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+                <svg id="themeIcon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"></svg>
+            </button>
+            <a href="feed.html" class="cancel-btn">Cancel</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="pulse-rings">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring-center">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 0 1 5.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 0 1 9.288 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                </svg>
+            </div>
+        </div>
+
+        <h1 class="status-heading" id="statusHeading">Finding a Mind</h1>
+        <p class="status-sub" id="statusSub">Scanning for someone ready to talk honestly<strong id="targetDisplay"></strong></p>
+
+        <div class="waiting-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="queue-note">
+            <span class="queue-dot"></span>
+            <span id="queueNote">You're in the queue</span>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { firebaseConfig } from "./js/firebase.js";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const postContext = urlParams.get('post') || "";
+
+        let matchmakingUnsubscribe = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { window.location.href = "/register"; return; }
+
+            const userSnapshot = await getDocs(query(collection(db, "users"), where("__name__", "==", user.uid)));
+            if (userSnapshot.empty) { window.location.href = "/register"; return; }
+            const myUsername = userSnapshot.docs[0].data().username;
+
+            startLiveMatchmakingPipeline(user.uid, myUsername);
+        });
+
+        function startLiveMatchmakingPipeline(myUid, myUsername) {
+            const queueRef = collection(db, "matchQueue");
+            const q = query(queueRef, where("status", "==", "waiting"));
+
+            matchmakingUnsubscribe = onSnapshot(q, async (snapshot) => {
+                const validMatches = snapshot.docs.filter(d => d.data().uid !== myUid);
+
+                if (validMatches.length > 0) {
+                    if (matchmakingUnsubscribe) matchmakingUnsubscribe();
+                    const matchDoc = validMatches[0];
+                    const matchData = matchDoc.data();
+                    const chatId = `chat_${matchDoc.id}`;
+
+                    try {
+                        await updateDoc(doc(db, "matchQueue", matchDoc.id), {
+                            status: "paired",
+                            peerUid: myUid,
+                            peerUsername: myUsername,
+                            chatId,
+                            contextPost: postContext
+                        });
+                        window.location.href = `/chat.html?id=${chatId}&peer=${encodeURIComponent(matchData.username)}&post=${encodeURIComponent(postContext)}`;
+                    } catch {
+                        startLiveMatchmakingPipeline(myUid, myUsername);
+                    }
+                } else {
+                    const myActiveTickets = snapshot.docs.filter(d => d.data().uid === myUid);
+                    if (myActiveTickets.length === 0) {
+                        enterQueue(myUid, myUsername);
+                    }
+                }
+            });
+        }
+
+        async function enterQueue(uid, username) {
+            try {
+                const docRef = await addDoc(collection(db, "matchQueue"), {
+                    uid, username, status: "waiting",
+                    contextPost: postContext,
+                    createdAt: new Date()
+                });
+
+                const ticketUnsubscribe = onSnapshot(doc(db, "matchQueue", docRef.id), (snapshot) => {
+                    const data = snapshot.data();
+                    if (data && data.status === "paired") {
+                        if (matchmakingUnsubscribe) matchmakingUnsubscribe();
+                        ticketUnsubscribe();
+                        window.location.href = `/chat.html?id=${data.chatId}&peer=${encodeURIComponent(data.peerUsername)}&post=${encodeURIComponent(data.contextPost || postContext)}`;
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    </script>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const saved = localStorage.getItem('moments-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', saved);
+        setIcon(saved);
+
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('moments-theme', next);
+            setIcon(next);
+        });
+
+        function setIcon(theme) {
+            themeIcon.innerHTML = theme === 'dark'
+                ? `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`
+                : `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+        }
+    </script>
+</body>
+</html>
