@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments | Monami AI</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#3B82F6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Clash Display"', 'sans-serif'],
+            body: ['"Clash Display"', 'sans-serif'],
+          },
+          colors: {
+            night: 'var(--bg-night)',
+            surface: 'var(--bg-surface)',
+            hairline: 'var(--border-hairline)',
+            accent: 'var(--accent-color)',
+            btntext: 'var(--btn-text)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root, .theme-sapphire { --bg-night: #030712; --bg-surface: #0B132B; --border-hairline: rgba(255, 255, 255, 0.07); --accent-color: #3B82F6; --btn-text: #FFFFFF; --text-main: #F1F5F9; --glow-color: rgba(59, 130, 246, 0.12); }
+    .theme-emerald { --bg-night: #022c22; --bg-surface: #064e3b; --border-hairline: rgba(52, 211, 153, 0.15); --accent-color: #10B981; --btn-text: #FFFFFF; --text-main: #ECFDF5; --glow-color: rgba(16, 185, 129, 0.12); }
+    .theme-obsidian { --bg-night: #09090b; --bg-surface: #18181b; --border-hairline: rgba(255, 255, 255, 0.1); --accent-color: #FAFAFA; --btn-text: #09090b; --text-main: #FAFAFA; --glow-color: rgba(250, 250, 250, 0.08); }
+    .theme-crimson { --bg-night: #1c0505; --bg-surface: #2d0b0b; --border-hairline: rgba(248, 113, 113, 0.15); --accent-color: #EF4444; --btn-text: #FFFFFF; --text-main: #FEF2F2; --glow-color: rgba(239, 68, 68, 0.12); }
+    aside{ font-family: 'Clash Display', sans-serif; }
+    html, body { height: 100%; }
+    body { background-color: var(--bg-night); color: var(--text-main); font-family: 'Clash Display', sans-serif; overflow-x: hidden; }
+    .font-heading { font-family: 'Clash Display', sans-serif; }
+    .grid-bg-pattern { background-image: linear-gradient(to right, var(--border-hairline) 1px, transparent 1px), linear-gradient(to bottom, var(--border-hairline) 1px, transparent 1px); background-size: 32px 32px; }
+    .ambient-glow { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%); pointer-events: none; z-index: 0; }
+    #chat-scroll::-webkit-scrollbar { width: 6px; }
+    #chat-scroll::-webkit-scrollbar-thumb { background: var(--border-hairline); border-radius: 10px; }
+    .bubble-in { animation: bubbleIn 0.25s ease-out; }
+    @keyframes bubbleIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .typing-dot { animation: typingPulse 1.2s infinite ease-in-out; }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typingPulse { 0%, 60%, 100% { opacity: 0.25; transform: scale(0.85); } 30% { opacity: 1; transform: scale(1); } }
+    #chat-input { field-sizing: content; }
+  </style>
+</head>
+<body class="theme-sapphire h-full flex flex-col md:flex-row selection:bg-accent/35 selection:text-white grid-bg-pattern overflow-hidden">
+
+  <!-- UNIFIED DESKTOP SIDEBAR -->
+  <aside class="fixed md:sticky bottom-0 md:top-0 left-0 right-0 md:w-64 md:h-screen bg-night/95 md:bg-night/85 backdrop-blur-2xl border-t md:border-t-0 md:border-r border-hairline p-3 md:p-6 z-50 flex md:flex-col justify-between items-center md:items-stretch shrink-0 shadow-2xl md:shadow-none">
+    <div class="hidden md:flex flex-col space-y-8 w-full">
+      <div class="flex items-center justify-between">
+        <a href="home.html" class="flex items-center gap-3 group">
+          <span class="w-3 h-3 bg-accent rounded-sm group-hover:scale-125 transition-transform duration-300 shadow-lg shadow-accent/40"></span>
+          <span class="font-heading text-xl font-bold tracking-widest uppercase text-white">Moments</span>
+        </a>
+      </div>
+
+      <!-- User Account Info -->
+      <div class="bento-glass rounded-2xl p-3.5 border border-hairline space-y-1.5">
+        <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+          <span>CURRENT USER</span>
+          <span id="sidebar-tier-badge" class="px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20">SYNCING...</span>
+        </div>
+        <div id="sidebar-username" class="font-heading text-sm font-bold text-white truncate">Loading...</div>
+      </div>
+
+      <nav class="space-y-1.5">
+        <a href="home.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          <span>Home</span>
+        </a>
+        <a href="compose.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>Compose</span>
+        </a>
+        <a href="monami.html" id="nav-monami-link" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-surface/80 text-white font-bold text-xs border border-white/20 shadow-sm">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <span>Monami AI</span>
+          </div>
+          <span class="text-[9px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20 font-mono">PRO</span>
+        </a>
+        <a href="identity-match.html" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <span>Identity Matcher</span>
+          </div>
+          <span class="text-[9px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20 font-mono">PREMIUM</span>
+        </a>
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <span>Profile</span>
+        </a>
+        <a href="upgrade.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-amber-400 hover:text-amber-300 transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span class="font-semibold">Upgrade Plan</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="flex md:hidden w-full justify-around items-center py-1">
+      <a href="home.html" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-[9px] font-mono">Home</span>
+      </a>
+      <a href="compose.html" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        <span class="text-[9px] font-mono">Compose</span>
+      </a>
+      <a href="monami.html" id="mobile-nav-monami-link" class="p-2 text-accent flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <span class="text-[9px] font-mono">Monami</span>
+      </a>
+      <a href="profile.html" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        <span class="text-[9px] font-mono">Profile</span>
+      </a>
+      <button onclick="cycleTheme()" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 73.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+        <span id="mobile-theme-tag" class="text-[9px] font-mono uppercase">Theme</span>
+      </button>
+    </div>
+
+    <div class="hidden md:block space-y-3 pt-6 border-t border-hairline w-full">
+      <button onclick="cycleTheme()" class="w-full px-3.5 py-2.5 border border-hairline bg-surface/30 hover:bg-surface/60 text-slate-400 hover:text-white transition-all rounded-xl flex items-center justify-between text-xs">
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span><span>Themes</span></span>
+        <strong id="sidebar-theme-tag" class="text-white text-[10px] uppercase font-mono">Sapphire</strong>
+      </button>
+      <button id="logout-btn" class="w-full px-3.5 py-2 text-left text-red-400 hover:text-red-300 font-mono text-[10px] uppercase transition-colors rounded-xl hover:bg-red-500/10">Log Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CHAT ENVIRONMENT — full-height, ChatGPT/Claude style -->
+  <main class="flex-1 flex flex-col relative min-h-0 h-full">
+    <div class="ambient-glow -top-10 -left-10 pointer-events-none"></div>
+
+    <!-- LOCKED STATE -->
+    <div id="monami-locked-view" class="flex-1 flex items-center justify-center px-4 hidden">
+      <div class="bento-glass rounded-3xl p-8 sm:p-12 space-y-6 border border-hairline shadow-xl text-center max-w-md w-full relative z-10">
+        <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto text-2xl shadow-lg shadow-amber-500/10">🔒</div>
+        <div class="space-y-2">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-amber-400">Pro Gateway Restricted</span>
+          <h1 class="font-heading text-2xl sm:text-3xl font-bold text-white tracking-tight">Monami AI</h1>
+          <p class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed">Your companion for reflecting on moments, drafting thoughts, and thinking things through.</p>
+        </div>
+        <div class="pt-2">
+          <a href="upgrade.html" class="inline-flex items-center justify-center px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 text-black text-xs font-bold uppercase tracking-wider rounded-xl shadow-lg hover:brightness-110 transition-all">Unlock Pro Architecture</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNLOCKED CHAT STATE — full bleed, edge to edge -->
+    <div id="monami-unlocked-view" class="flex-1 flex flex-col min-h-0 relative z-10 hidden">
+
+      <!-- Top bar -->
+      <div class="shrink-0 border-b border-hairline px-4 sm:px-8 py-3.5 flex items-center justify-between bg-night/70 backdrop-blur-xl">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-xl bg-accent/15 border border-accent/30 flex items-center justify-center">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          </div>
+          <div>
+            <h1 class="font-heading text-sm font-bold text-white leading-tight">Monami AI</h1>
+            <span class="text-[10px] font-mono text-emerald-400 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>Online</span>
+          </div>
+        </div>
+        <button id="clear-chat-btn" class="text-[10px] font-mono text-slate-500 hover:text-red-400 transition-colors uppercase tracking-wider">Clear chat</button>
+      </div>
+
+      <!-- Message stream — fills all remaining vertical space -->
+      <div id="chat-scroll" class="flex-1 min-h-0 overflow-y-auto px-4 sm:px-8 py-6">
+        <div class="max-w-3xl mx-auto w-full space-y-6">
+          <div id="chat-empty-state" class="flex flex-col items-center justify-center text-center py-16 space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center text-xl">💬</div>
+            <p class="text-xs text-slate-400 max-w-xs">Ask Monami to help you reflect on a moment, shape a thought, or just talk something through.</p>
+          </div>
+          <div id="chat-messages" class="space-y-6"></div>
+        </div>
+      </div>
+
+      <!-- Input bar — pinned to bottom of the chat pane, full width -->
+      <div class="shrink-0 border-t border-hairline px-4 sm:px-8 py-4 pb-6 md:pb-4 bg-night/70 backdrop-blur-xl">
+        <form id="chat-form" class="max-w-3xl mx-auto w-full flex items-end gap-2 bg-[var(--bg-night)] border border-hairline rounded-2xl p-2 shadow-lg focus-within:border-accent/40 transition-colors">
+          <textarea id="chat-input" rows="1" placeholder="Message Monami..." class="flex-1 bg-transparent resize-none text-sm text-white placeholder-slate-500 focus:outline-none px-3 py-2.5 max-h-40"></textarea>
+          <button type="submit" id="chat-send-btn" class="shrink-0 w-10 h-10 rounded-xl bg-accent text-btntext flex items-center justify-center hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 0l-6 6m6-6l6 6"></path></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const themes = ['sapphire', 'emerald', 'obsidian', 'crimson'];
+    let currentThemeIdx = 0;
+    function setTheme(themeName) {
+      document.body.className = `theme-${themeName} h-full flex flex-col md:flex-row selection:bg-accent/35 selection:text-white grid-bg-pattern overflow-hidden`;
+      if (document.getElementById('sidebar-theme-tag')) document.getElementById('sidebar-theme-tag').innerText = themeName;
+      if (document.getElementById('mobile-theme-tag')) document.getElementById('mobile-theme-tag').innerText = themeName;
+      localStorage.setItem('ciphree_preferred_theme', themeName);
+      currentThemeIdx = themes.indexOf(themeName);
+    }
+    function cycleTheme() { currentThemeIdx = (currentThemeIdx + 1) % themes.length; setTheme(themes[currentThemeIdx]); }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem('ciphree_preferred_theme');
+      if (saved && themes.includes(saved)) setTheme(saved);
+
+      const activeUserId = localStorage.getItem("moments_authenticated_user_id");
+      if (!activeUserId) { window.location.href = "login.html"; return; }
+
+      const activeUserName = localStorage.getItem("moments_authenticated_user_name") || "Cipherous";
+      const userTier = localStorage.getItem("moments_user_tier") || "free";
+
+      if (document.getElementById("sidebar-username")) {
+        document.getElementById("sidebar-username").innerText = activeUserName;
+      }
+
+      const badge = document.getElementById("sidebar-tier-badge");
+      if (badge) {
+        badge.innerText = userTier.toUpperCase();
+        if (userTier === 'pro' || userTier === 'premium') {
+          badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20";
+        } else if (userTier === 'enterprise') {
+          badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30";
+        } else {
+          badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20";
+        }
+      }
+
+      const lockedView = document.getElementById("monami-locked-view");
+      const unlockedView = document.getElementById("monami-unlocked-view");
+
+      if (userTier === 'pro' || userTier === 'enterprise') {
+        lockedView.classList.add("hidden");
+        unlockedView.classList.remove("hidden");
+      } else {
+        unlockedView.classList.add("hidden");
+        lockedView.classList.remove("hidden");
+      }
+
+      document.getElementById("logout-btn")?.addEventListener("click", () => {
+        localStorage.removeItem("moments_authenticated_user_id");
+        localStorage.removeItem("moments_authenticated_user_name");
+        localStorage.removeItem("moments_user_tier");
+        window.location.href = "login.html";
+      });
+    });
+  </script>
+
+  <script>
+    // --- MONAMI CHAT LOGIC ---
+    // Tries the real backend first (/api/monami-chat). That endpoint doesn't
+    // exist yet, so right now every message falls through to a client-side
+    // placeholder responder below — it always answers something, it's just
+    // not a real model yet. Swap generateFallbackReply() out once your
+    // Cloud Function is wired up to call the Anthropic API server-side.
+    const chatForm = document.getElementById("chat-form");
+    const chatInput = document.getElementById("chat-input");
+    const chatMessages = document.getElementById("chat-messages");
+    const chatScroll = document.getElementById("chat-scroll");
+    const chatEmptyState = document.getElementById("chat-empty-state");
+    const sendBtn = document.getElementById("chat-send-btn");
+    const clearBtn = document.getElementById("clear-chat-btn");
+
+    let conversationHistory = [];
+
+    chatInput?.addEventListener("input", () => {
+      chatInput.style.height = "auto";
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 160) + "px";
+    });
+
+    chatInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        chatForm.requestSubmit();
+      }
+    });
+
+    function scrollToBottom() {
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+    }
+
+    function renderMessage(role, text) {
+      chatEmptyState?.classList.add("hidden");
+      const wrapper = document.createElement("div");
+      wrapper.className = `bubble-in flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = role === 'user'
+        ? "max-w-[85%] sm:max-w-[75%] bg-accent text-btntext text-sm leading-relaxed rounded-2xl rounded-br-md px-4 py-2.5 shadow-md whitespace-pre-wrap"
+        : "max-w-[85%] sm:max-w-[75%] bg-surface/60 border border-hairline text-slate-200 text-sm leading-relaxed rounded-2xl rounded-bl-md px-4 py-2.5 shadow-sm whitespace-pre-wrap";
+      bubble.innerText = text;
+
+      wrapper.appendChild(bubble);
+      chatMessages.appendChild(wrapper);
+      scrollToBottom();
+      return bubble;
+    }
+
+    function renderTypingIndicator() {
+      const wrapper = document.createElement("div");
+      wrapper.id = "typing-indicator";
+      wrapper.className = "bubble-in flex justify-start";
+      wrapper.innerHTML = `
+        <div class="bg-surface/60 border border-hairline rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-1.5 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400 typing-dot"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400 typing-dot"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400 typing-dot"></span>
+        </div>`;
+      chatMessages.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function removeTypingIndicator() {
+      document.getElementById("typing-indicator")?.remove();
+    }
+
+    // --- Placeholder responder (client-side, no real model) ---
+    // Gives varied, on-topic-ish answers so the chat never dead-ends with
+    // an error while the real backend isn't live yet.
+    function generateFallbackReply(userText, history) {
+      const text = userText.trim();
+      const lower = text.toLowerCase();
+
+      if (/^(hi|hey|hello|yo|sup)\b/.test(lower)) {
+        return "Hey — good to hear from you. What's on your mind today?";
+      }
+      if (lower.includes("who are you") || lower.includes("what are you")) {
+        return "I'm Monami, your thinking companion inside Moments. I'm here to help you reflect on moments, shape drafts, or just talk something through.";
+      }
+      if (text.endsWith("?")) {
+        const openers = [
+          "That's worth sitting with for a second.",
+          "Good question — here's one way to look at it:",
+          "Let me think through that with you.",
+          "Here's my take, though take it as a starting point rather than the final word:"
+        ];
+        const opener = openers[Math.floor(Math.random() * openers.length)];
+        return `${opener} ${text.replace(/\?$/, '')} often comes down to what you're actually optimizing for in the moment — clarity, connection, or momentum. Which of those feels most true for you right now?`;
+      }
+      if (lower.length < 12) {
+        return `Tell me a bit more — what made you think of "${text}" just now?`;
+      }
+      const reflections = [
+        `Here's what stands out to me: ${text.slice(0, 60)}${text.length > 60 ? '…' : ''} — there's something honest in how you put that.`,
+        `I hear you. If I reflect that back: you're working through ${text.slice(0, 50)}${text.length > 50 ? '…' : ''} Want to unpack what's underneath it?`,
+        `That's a real thought worth developing further. What's the smallest next step that would move it forward?`
+      ];
+      return reflections[Math.floor(Math.random() * reflections.length)];
+    }
+
+    async function getMonamiReply(userText) {
+      try {
+        const res = await fetch("/api/monami-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: conversationHistory })
+        });
+        if (!res.ok) throw new Error("Backend not available yet");
+        const data = await res.json();
+        if (!data.reply) throw new Error("Empty reply from backend");
+        return data.reply;
+      } catch (err) {
+        // Backend isn't wired up yet — fall back to a generated response
+        // instead of surfacing a connection error to the user.
+        return generateFallbackReply(userText, conversationHistory);
+      }
+    }
+
+    chatForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      renderMessage("user", text);
+      conversationHistory.push({ role: "user", content: text });
+      chatInput.value = "";
+      chatInput.style.height = "auto";
+      sendBtn.disabled = true;
+      renderTypingIndicator();
+
+      const reply = await getMonamiReply(text);
+
+      // small delay so the typing indicator doesn't feel instant/fake
+      await new Promise(r => setTimeout(r, 400 + Math.random() * 500));
+
+      removeTypingIndicator();
+      renderMessage("assistant", reply);
+      conversationHistory.push({ role: "assistant", content: reply });
+      sendBtn.disabled = false;
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      conversationHistory = [];
+      chatMessages.innerHTML = "";
+      chatEmptyState?.classList.remove("hidden");
+    });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+  </script>
+</body>
+</html>

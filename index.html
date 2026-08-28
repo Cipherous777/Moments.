@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <!-- Basic SEO Metadata -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments — Intentional Connection Without Algorithms</title>
+  <meta name="description" content="Bored with social media? Make real connections. Moments replaces algorithmic feeds and likes with shared human stories and intentional chat matchmaking.">
+  <meta name="keywords" content="anti algorithm app, no likes social network, shared stories connection, moments ciphree, intentional matchmaking app">
+  <meta name="author" content="Ciphree">
+  <meta name="robots" content="index, follow">
+
+  <!-- PWA: manifest + theme color + iOS-specific meta -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#2563EB">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Moments">
+  <!-- Point this at a real 180x180 icon in your project once you have one -->
+  <link rel="apple-touch-icon" href="/icons/icon-180.png">
+
+  <!-- Open Graph / Facebook SEO -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moments.ciphree.com/">
+  <meta property="og:title" content="Moments — Real Human Depth">
+  <meta property="og:description" content="Bored with social media? Experience story sharing with zero likes, zero algorithms, and direct prompt-based matchmaking.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Twitter SEO -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Moments — Real Human Depth">
+  <meta name="twitter:description" content="Bored with social media? Experience story sharing with zero likes, zero algorithms, and direct prompt-based matchmaking.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Moments",
+    "url": "https://moments.ciphree.com/",
+    "description": "An intentional connection platform with zero algorithms, zero likes, and story-based matchmaking.",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "iOS, Android, Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Clash Display"', 'sans-serif'],
+            body: ['"Clash Display"', 'sans-serif'],
+          },
+          colors: {
+            night: 'var(--bg-night)',
+            surface: 'var(--bg-surface)',
+            hairline: 'var(--border-hairline)',
+            accent: 'var(--accent-color)',
+            btntext: 'var(--btn-text)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* CSS Variables for Dynamic Theme Palette */
+    :root, .theme-sapphire {
+      --bg-night: #030508;
+      --bg-surface: #090D14;
+      --border-hairline: #161F30;
+      --accent-color: #2563EB;
+      --accent-hover: #1D4ED8;
+      --btn-text: #FFFFFF;
+      --text-main: #E2E8F0;
+      --card-bg: #030508;
+    }
+
+    .theme-monochrome {
+      --bg-night: #080808;
+      --bg-surface: #121212;
+      --border-hairline: #282828;
+      --accent-color: #F5F5F5;
+      --accent-hover: #E5E5E5;
+      --btn-text: #000000;
+      --text-main: #F5F5F5;
+      --card-bg: #0A0A0A;
+    }
+
+    .theme-emerald {
+      --bg-night: #020D0A;
+      --bg-surface: #061814;
+      --border-hairline: #0D332B;
+      --accent-color: #059669;
+      --accent-hover: #047857;
+      --btn-text: #FFFFFF;
+      --text-main: #ECFDF5;
+      --card-bg: #020D0A;
+    }
+
+    .theme-nordic {
+      --bg-night: #0B0F19;
+      --bg-surface: #111827;
+      --border-hairline: #1F2937;
+      --accent-color: #06B6D4;
+      --accent-hover: #0891B2;
+      --btn-text: #000000;
+      --text-main: #F3F4F6;
+      --card-bg: #0B0F19;
+    }
+
+    body {
+      background-color: var(--bg-night);
+      color: var(--text-main);
+      font-family: 'Clash Display', sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Clash Display', sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    /* Blueprint Background Pattern */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    }
+
+    .perspective-canvas {
+      perspective: 1000px;
+    }
+
+    .transform-card {
+      transform-style: preserve-3d;
+      will-change: transform, opacity;
+      background-color: var(--card-bg);
+      border-color: var(--border-hairline);
+    }
+
+    /* Dynamic Button Styling Overrides across themes */
+    .btn-accent {
+      background-color: var(--accent-color) !important;
+      color: var(--btn-text) !important;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-accent:hover {
+      background-color: var(--accent-hover) !important;
+    }
+
+    .btn-outline {
+      border-color: var(--border-hairline) !important;
+      background-color: var(--bg-surface) !important;
+      color: var(--text-main) !important;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent-color) !important;
+    }
+
+    /* --- SCROLL REVEAL ADDITIONS --- */
+    .reveal-up, .reveal-card, .reveal-item {
+      will-change: transform, opacity;
+    }
+
+    /* Hero parallax glow */
+    .hero-glow {
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      width: 900px;
+      height: 900px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, color-mix(in srgb, var(--accent-color) 18%, transparent) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform;
+    }
+
+    /* iOS install instructions modal */
+    #ios-install-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0,0,0,0.6);
+      align-items: flex-end;
+      justify-content: center;
+    }
+    #ios-install-modal.open {
+      display: flex;
+    }
+    #ios-install-sheet {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-hairline);
+      border-radius: 20px 20px 0 0;
+      max-width: 480px;
+      width: 100%;
+      padding: 24px;
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body class="theme-sapphire min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white antialiased bg-grid-pattern">
+
+  <!-- NAVIGATION -->
+  <header class="border-b border-hairline sticky top-0 z-50 bg-night/90 backdrop-blur-md transition-colors duration-400">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 bg-accent"></span>
+        <span class="font-heading text-xl font-bold tracking-widest text-white uppercase">Moments</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-widest text-slate-400">
+        <a href="#uniqueness" class="hover:text-white transition-colors">Why Unique</a>
+        <a href="#pricing" class="hover:text-white transition-colors">Pricing ($ USD)</a>
+        <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <!-- 4-Theme Selector Button -->
+        <button onclick="cycleTheme()" class="px-3.5 py-2 border border-hairline bg-surface text-[10px] font-mono uppercase tracking-widest text-slate-300 hover:text-white transition-all flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          <span>Theme: <strong id="theme-indicator" class="text-white">Sapphire</strong></span>
+        </button>
+
+        <button id="nav-get-app-btn" class="px-5 py-2.5 btn-accent text-xs font-bold uppercase tracking-wider">
+          Get App
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow relative z-10">
+
+    <!-- 1. CATCHY HERO & CTA SECTION -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-12 pt-20 pb-24 border-b border-hairline relative overflow-hidden">
+      <div class="hero-glow" id="hero-glow"></div>
+      <div class="max-w-4xl relative z-10">
+        
+        <div class="hero-badge inline-flex items-center gap-3 px-3 py-1 border border-hairline bg-surface text-accent text-xs font-semibold uppercase tracking-widest mb-8">
+          <span class="w-2 h-2 bg-accent animate-ping"></span>
+          Intentional Connection Platform
+        </div>
+        
+        <h1 class="hero-title font-heading text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.02] tracking-tight mb-8">
+          Bored with social media? <br>
+          <span class="text-accent">Make real connections.</span>
+        </h1>
+
+        <p class="hero-sub text-base sm:text-lg text-slate-400 max-w-xl leading-relaxed mb-10">
+          Moments has no algorithms and no likes. You can connect with people through shared stories and experience, or type exactly who you want to meet.
+        </p>
+
+        <div class="hero-buttons flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <button id="hero-download-btn" class="px-8 py-4 btn-accent font-bold text-xs uppercase tracking-widest text-center shadow-lg">
+            Download Web App
+          </button>
+          <a href="#uniqueness" class="px-8 py-4 btn-outline font-bold text-xs uppercase tracking-widest text-center">
+            See How We Are Unique ↓
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2. WHY WE ARE UNIQUE (3 PILLARS WITH 3D MORPHING CARD SHOWCASE) -->
+    <section id="uniqueness" class="relative border-b border-hairline bg-surface/30">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-20 pb-8 text-center reveal-up">
+        <span class="text-xs font-bold uppercase tracking-[0.3em] text-accent">The 3 Unique Pillars</span>
+        <h2 class="font-heading text-3xl sm:text-5xl font-bold text-white mt-2">What sets Moments apart</h2>
+      </div>
+
+      <!-- STICKY PIN 3D SCROLL CARD -->
+      <div id="sticky-pin-wrapper" class="relative h-[220vh]">
+        <div class="sticky top-28 max-w-3xl mx-auto px-6 perspective-canvas">
+          
+          <div id="transform-card" class="transform-card border-2 p-8 sm:p-12 relative overflow-hidden min-h-[420px] flex flex-col justify-between shadow-2xl">
+            
+            <div id="card-bg-overlay" class="absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-20" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="absolute inset-0 bg-night/85"></div>
+
+            <div class="relative z-10 flex items-center justify-between border-b border-hairline pb-4">
+              <span id="card-stage-tag" class="px-3 py-1 bg-accent/20 border border-accent/40 text-accent text-[10px] font-bold uppercase tracking-widest">
+                Pillar 01 / Core Foundation
+              </span>
+              <span id="card-step-num" class="font-heading text-xl font-bold text-slate-500">01</span>
+            </div>
+
+            <div class="relative z-10 my-6 space-y-3">
+              <h3 id="card-title" class="font-heading text-2xl sm:text-4xl font-bold text-white leading-tight">
+                No Algorithms & No Likes
+              </h3>
+              <p id="card-desc" class="text-slate-300 text-xs sm:text-sm max-w-lg leading-relaxed">
+                Zero vanity metrics to chase. We stripped away dopamine farming, like counters, and engagement algorithms so you can write and read without anxiety.
+              </p>
+            </div>
+
+            <div class="relative z-10 flex items-center justify-between text-xs text-slate-400 pt-4 border-t border-hairline font-mono">
+              <span id="card-footer-left">Zero Dopamine Traps</span>
+              <span id="card-footer-right" class="text-white">Pure Human Thought</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PRICING SECTION ($ USD) -->
+    <section id="pricing" class="py-28 bg-surface/30 border-b border-hairline">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="text-center max-w-xl mx-auto mb-16 space-y-3 reveal-up">
+          <span class="text-xs uppercase tracking-widest text-accent font-bold">Clear Pricing ($ USD)</span>
+          <h2 class="font-heading text-3xl sm:text-5xl font-bold text-white">Select your plan</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <div class="reveal-card border border-hairline p-8 bg-night flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Free Starter</span>
+              <div class="font-heading text-4xl font-bold text-white my-5">$0 <span class="text-xs font-normal text-slate-500">/ forever</span></div>
+              <ul class="space-y-3 text-xs text-slate-300 border-t border-hairline pt-6 mb-8">
+                <li>• No algorithms & no likes</li>
+                <li>• Connect via shared story threads</li>
+                <li>• Post a moment: 3/day</li>
+                <li>• Reply with a story: 3/day</li>
+                <li>• Upvote: unlimited (counts hidden)</li>
+              
+              </ul>
+            </div>
+            <button onclick="alert('Creating free account...')" class="w-full py-3.5 btn-outline text-xs font-bold uppercase tracking-widest">
+              Start Free ($0 USD)
+            </button>
+          </div>
+
+          <div class="reveal-card border-2 border-accent p-8 bg-night flex flex-col justify-between relative shadow-xl shadow-blue-500/10 scale-[1.02]">
+            <span class="absolute -top-3 right-6 px-3 py-0.5 bg-accent text-btntext text-[9px] font-bold uppercase tracking-widest">Popular</span>
+            <div>
+              <span class="text-xs font-bold uppercase tracking-widest text-accent">Premium Member</span>
+              <div class="font-heading text-4xl font-bold text-white my-5">$19 <span class="text-xs font-normal text-slate-500">/ month</span></div>
+              <ul class="space-y-3 text-xs text-slate-300 border-t border-hairline pt-6 mb-8">
+                <li>• No algorithms & no likes</li>
+                <li>• Connect via shared stories</li>
+                <li>• <strong>Type-to-Connect Chatbox Matchmaker</strong></li>
+                <li>• Post a moment: 5/day</li>
+                <li>• Reply with a story: 5/day</li>
+                <li>• Connect: unlimited, random match</li>
+                <li>• Interest-based matching</li>
+              </ul>
+            </div>
+            <button onclick="alert('Redirecting to $3 USD checkout...')" class="w-full py-3.5 btn-accent text-xs font-bold uppercase tracking-widest">
+              Get Premium ($19 USD / mo)
+            </button>
+          </div>
+
+          <div class="reveal-card border border-hairline p-8 bg-night flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Pro Unlimited</span>
+              <div class="font-heading text-4xl font-bold text-white my-5">$29 <span class="text-xs font-normal text-slate-500">/ month</span></div>
+              <ul class="space-y-3 text-xs text-slate-300 border-t border-hairline pt-6 mb-8">
+                <li>• All Premium features included</li>
+                <li>• Post a moment: unlimited</li>
+                <li>• Reply with a story: unlimited</li>
+                <li>• Upvote: unlimited</li>
+                <li>• Monami (AI): full live version</li>
+              </ul>
+            </div>
+            <button onclick="alert('Redirecting to $8 USD checkout...')" class="w-full py-3.5 btn-outline text-xs font-bold uppercase tracking-widest">
+              Get Pro ($29 USD / mo)
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. UNIQUE & REAL DETAILED FAQ SECTION -->
+    <section id="faq" class="max-w-4xl mx-auto px-6 lg:px-12 py-28 border-b border-hairline">
+      <div class="text-center mb-16 space-y-2 reveal-up">
+        <span class="text-xs font-bold uppercase tracking-widest text-accent">Clear Answers</span>
+        <h2 class="font-heading text-3xl sm:text-5xl font-bold text-white">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="space-y-4">
+        
+        <details class="reveal-item group border border-hairline bg-surface/50 p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+          <summary class="flex items-center justify-between font-heading text-lg font-bold text-white">
+            <span>How does the Premium Chatbox Matchmaker pair users?</span>
+            <span class="text-accent transition-transform group-open:rotate-180">↓</span>
+          </summary>
+          <p class="text-xs text-slate-400 leading-relaxed mt-4 pt-4 border-t border-hairline">
+            Rather than browsing static profile cards, you type a specific topic, thought, or story into the chatbox and the matchmaker instantly pairs you with another active user seeking that exact conversation.
+          </p>
+        </details>
+
+        <details class="reveal-item group border border-hairline bg-surface/50 p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+          <summary class="flex items-center justify-between font-heading text-lg font-bold text-white">
+            <span>Why are public likes and view counters completely removed?</span>
+            <span class="text-accent transition-transform group-open:rotate-180">↓</span>
+          </summary>
+          <p class="text-xs text-slate-400 leading-relaxed mt-4 pt-4 border-t border-hairline">
+            Social algorithms treat human emotions as engagement bait. By hiding public likes, view counts, and follower totals, users write honest life experiences instead of chasing viral dopamine loops.
+          </p>
+        </details>
+
+        <details class="reveal-item group border border-hairline bg-surface/50 p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+          <summary class="flex items-center justify-between font-heading text-lg font-bold text-white">
+            <span>Can I connect with people anonymously using a pseudonym?</span>
+            <span class="text-accent transition-transform group-open:rotate-180">↓</span>
+          </summary>
+          <p class="text-xs text-slate-400 leading-relaxed mt-4 pt-4 border-t border-hairline">
+            Yes. You can publish shared stories or enter chat matchmaking under a persistent pen name. You control how much of your identity you reveal.
+          </p>
+        </details>
+
+        <details class="reveal-item group border border-hairline bg-surface/50 p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+          <summary class="flex items-center justify-between font-heading text-lg font-bold text-white">
+            <span>Are payments billed internationally in USD ($)?</span>
+            <span class="text-accent transition-transform group-open:rotate-180">↓</span>
+          </summary>
+          <p class="text-xs text-slate-400 leading-relaxed mt-4 pt-4 border-t border-hairline">
+            Yes. Premium ($19 USD/mo) and Pro ($29 USD/mo) memberships are processed securely worldwide in USD ($) with no hidden conversion fees.
+          </p>
+        </details>
+
+        <details class="reveal-item group border border-hairline bg-surface/50 p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+          <summary class="flex items-center justify-between font-heading text-lg font-bold text-white">
+            <span>What happens if someone sends offensive messages in chat matchmaking?</span>
+            <span class="text-accent transition-transform group-open:rotate-180">↓</span>
+          </summary>
+          <p class="text-xs text-slate-400 leading-relaxed mt-4 pt-4 border-t border-hairline">
+            Connections are strictly 1-on-1 and opt-in. Either user can leave, or contact us for further help. 
+          </p>
+        </details>
+
+        <details class="reveal-item group border border-hairline bg-surface/50 p-6 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+          <summary class="flex items-center justify-between font-heading text-lg font-bold text-white">
+            <span>Do I need to download an app store app to use Moments?</span>
+            <span class="text-accent transition-transform group-open:rotate-180">↓</span>
+          </summary>
+          <p class="text-xs text-slate-400 leading-relaxed mt-4 pt-4 border-t border-hairline">
+            No. Moments is a Progressive Web Application (PWA) that installs directly to your home screen or desktop browser without needing the iOS App Store or Google Play Store.
+          </p>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- 5. DOWNLOAD / GET WEBSITE SECTION -->
+    <section id="download" class="py-28 text-center px-6 bg-night">
+      <div class="max-w-2xl mx-auto space-y-6 reveal-up">
+        <h2 class="font-heading text-3xl sm:text-5xl font-bold text-white">
+          Ready for real connections?
+        </h2>
+        <p class="text-slate-400 text-xs sm:text-sm max-w-md mx-auto">
+          Download the progressive application or access directly in your browser.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <button id="download-section-btn" class="px-8 py-4 btn-accent font-bold text-xs uppercase tracking-widest shadow-xl">
+            Download Web Application
+          </button>
+          <a href="#pricing" class="px-8 py-4 btn-outline font-bold text-xs uppercase tracking-widest">
+            View Pricing Tiers
+          </a>
+        </div>
+        <p id="already-installed-note" class="hidden text-[11px] text-slate-500 font-mono uppercase tracking-widest pt-2">
+          Already installed — open Moments from your home screen or app list.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-hairline py-10 px-6 lg:px-12 text-xs text-slate-500 bg-night">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>© 2026 Ciphree • Moments Social Platform</div>
+      <div class="flex gap-6">
+        <a href="#pricing" class="hover:text-white">Pricing</a>
+        <a href="#faq" class="hover:text-white">FAQ</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- iOS "Add to Home Screen" instructions sheet (no native install prompt exists on iOS Safari) -->
+  <div id="ios-install-modal">
+    <div id="ios-install-sheet">
+      <h3 class="font-heading text-lg font-bold text-white mb-3">Install Moments on iPhone</h3>
+      <ol class="text-xs text-slate-300 space-y-2 leading-relaxed list-decimal list-inside">
+        <li>Tap the <strong>Share</strong> icon in Safari's toolbar (the square with an arrow pointing up).</li>
+        <li>Scroll down and tap <strong>"Add to Home Screen."</strong></li>
+        <li>Tap <strong>"Add"</strong> in the top right corner.</li>
+      </ol>
+      <button id="ios-install-close" class="w-full mt-6 py-3 btn-outline text-xs font-bold uppercase tracking-widest">
+        Got it
+      </button>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero Entry Animation
+    gsap.timeline()
+      .from(".hero-badge", { opacity: 0, y: -15, duration: 0.6 })
+      .from(".hero-title", { opacity: 0, y: 20, duration: 0.8 }, "-=0.3")
+      .from(".hero-sub", { opacity: 0, y: 15, duration: 0.6 }, "-=0.4")
+      .from(".hero-buttons", { opacity: 0, y: 15, duration: 0.6 }, "-=0.4");
+
+    // Hero glow parallax — drifts slower than scroll for depth
+    gsap.to("#hero-glow", {
+      y: 150,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "body",
+        start: "top top",
+        end: "bottom top",
+        scrub: 1
+      }
+    });
+
+    // Generic reveal — headers/blocks fade + slide up as they enter view
+    gsap.utils.toArray(".reveal-up").forEach((el) => {
+      gsap.from(el, {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 85%",
+          toggleActions: "play none none reverse"
+        }
+      });
+    });
+
+    // Pricing cards — staggered reveal, slight scale-up as each enters
+    ScrollTrigger.batch(".reveal-card", {
+      start: "top 85%",
+      once: true,
+      onEnter: (batch) => gsap.from(batch, {
+        opacity: 0,
+        y: 50,
+        scale: 0.96,
+        duration: 0.7,
+        stagger: 0.15,
+        ease: "power3.out"
+      })
+    });
+
+    // FAQ items — staggered slide-in from the left
+    ScrollTrigger.batch(".reveal-item", {
+      start: "top 90%",
+      once: true,
+      onEnter: (batch) => gsap.from(batch, {
+        opacity: 0,
+        x: -24,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out"
+      })
+    });
+
+    // 3 Unique Pillars Data
+    const cardStages = [
+      {
+        tag: "Pillar 01 / Core Foundation",
+        step: "01",
+        title: "No Algorithms & No Likes",
+        desc: "Zero vanity metrics to chase. We stripped away dopamine farming, like counters, and engagement algorithms so you can write and read without anxiety.",
+        left: "Zero Dopamine Traps",
+        right: "Pure Human Thought",
+        bg: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        tag: "Pillar 02 / Genuine Matching",
+        step: "02",
+        title: "Shared Stories & Experiences",
+        desc: "Connect directly with individuals who have gone through the exact same lived experiences, life shifts, and personal moments.",
+        left: "Lived Experience Alignment",
+        right: "Shared Story Threads",
+        bg: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        tag: "Pillar 03 / Premium Feature",
+        step: "03",
+        title: "Type-to-Connect Chatbox",
+        desc: "Skip endless profile scrolling. Simply type what or who you want to connect with into the chatbox and get paired intentionally.",
+        left: "Direct Intent Match",
+        right: "Premium Matchmaker",
+        bg: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1200&q=80"
+      }
+    ];
+
+    let currentStage = 0;
+
+    ScrollTrigger.create({
+      trigger: "#sticky-pin-wrapper",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.5,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const rotateY = Math.sin(progress * Math.PI) * 12;
+        const stageIndex = Math.min(Math.floor(progress * cardStages.length), cardStages.length - 1);
+        
+        if (stageIndex !== currentStage) {
+          currentStage = stageIndex;
+          const stage = cardStages[currentStage];
+
+          gsap.to("#transform-card", {
+            scale: 0.96,
+            duration: 0.15,
+            yoyo: true,
+            repeat: 1,
+            onRepeat: () => {
+              document.getElementById("card-stage-tag").textContent = stage.tag;
+              document.getElementById("card-step-num").textContent = stage.step;
+              document.getElementById("card-title").textContent = stage.title;
+              document.getElementById("card-desc").textContent = stage.desc;
+              document.getElementById("card-footer-left").textContent = stage.left;
+              document.getElementById("card-footer-right").textContent = stage.right;
+              document.getElementById("card-bg-overlay").style.backgroundImage = `url('${stage.bg}')`;
+            }
+          });
+        }
+
+        gsap.set("#transform-card", { rotateY: rotateY });
+      }
+    });
+
+    // 4 Theme Switcher Logic
+    const themes = [
+      { id: "theme-sapphire", name: "Sapphire" },
+      { id: "theme-monochrome", name: "Monochrome" },
+      { id: "theme-emerald", name: "Emerald" },
+      { id: "theme-nordic", name: "Nordic" }
+    ];
+
+    let themeIndex = 0;
+
+    function cycleTheme() {
+      const body = document.body;
+      body.classList.remove(themes[themeIndex].id);
+
+      themeIndex = (themeIndex + 1) % themes.length;
+
+      const nextTheme = themes[themeIndex];
+      body.classList.add(nextTheme.id);
+      document.getElementById("theme-indicator").textContent = nextTheme.name;
+    }
+
+    // ---------------------------------------------------------------------
+    // PWA INSTALL WIRING
+    // ---------------------------------------------------------------------
+    // Three buttons trigger install: nav "Get App", hero "Download Web App",
+    // and the bottom "Download Web Application" button.
+    const installButtons = [
+      document.getElementById("nav-get-app-btn"),
+      document.getElementById("hero-download-btn"),
+      document.getElementById("download-section-btn")
+    ].filter(Boolean);
+
+    const alreadyInstalledNote = document.getElementById("already-installed-note");
+
+    function isIOS() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    }
+
+    function isInStandaloneMode() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function showAlreadyInstalledState() {
+      installButtons.forEach(btn => {
+        btn.textContent = "Open Moments";
+        btn.onclick = () => { window.location.href = "/home.html"; };
+      });
+      if (alreadyInstalledNote) alreadyInstalledNote.classList.remove('hidden');
+    }
+
+    // Chrome/Edge/Android: capture the native install prompt so we can
+    // trigger it manually from our own styled buttons instead of relying
+    // on the browser's address-bar install icon.
+    let deferredInstallPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+
+      installButtons.forEach(btn => {
+        btn.onclick = async () => {
+          if (!deferredInstallPrompt) return;
+          deferredInstallPrompt.prompt();
+          const { outcome } = await deferredInstallPrompt.userChoice;
+          deferredInstallPrompt = null;
+          if (outcome === 'accepted') {
+            showAlreadyInstalledState();
+          }
+        };
+      });
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      showAlreadyInstalledState();
+    });
+
+    // iOS Safari: no beforeinstallprompt exists at all, so show manual
+    // "Add to Home Screen" instructions instead when the button is tapped.
+    const iosModal = document.getElementById('ios-install-modal');
+    const iosCloseBtn = document.getElementById('ios-install-close');
+
+    if (isIOS() && !isInStandaloneMode()) {
+      installButtons.forEach(btn => {
+        btn.onclick = () => { iosModal.classList.add('open'); };
+      });
+    }
+
+    iosCloseBtn?.addEventListener('click', () => {
+      iosModal.classList.remove('open');
+    });
+    iosModal?.addEventListener('click', (e) => {
+      if (e.target === iosModal) iosModal.classList.remove('open');
+    });
+
+    // If already running as an installed PWA (any platform), swap buttons
+    // to "Open Moments" instead of offering install again.
+    if (isInStandaloneMode()) {
+      showAlreadyInstalledState();
+    }
+
+    // Register the service worker (required for the app to be installable at all)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').catch(err => {
+        console.error('Service worker registration failed:', err);
+      });
+    }
+  </script>
+</body>
+</html>

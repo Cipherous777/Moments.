@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments | Upgrade Protocol</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#3B82F6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Paddle.js (Billing) -->
+  <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Clash Display"', 'sans-serif'],
+            body: ['"Clash Display"', 'sans-serif'],
+          },
+          colors: {
+            night: 'var(--bg-night)',
+            surface: 'var(--bg-surface)',
+            hairline: 'var(--border-hairline)',
+            accent: 'var(--accent-color)',
+            btntext: 'var(--btn-text)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root, .theme-sapphire { --bg-night: #030712; --bg-surface: #0B132B; --border-hairline: rgba(255, 255, 255, 0.07); --accent-color: #3B82F6; --btn-text: #FFFFFF; --text-main: #F1F5F9; --glow-color: rgba(59, 130, 246, 0.12); }
+    .theme-emerald { --bg-night: #022c22; --bg-surface: #064e3b; --border-hairline: rgba(52, 211, 153, 0.15); --accent-color: #10B981; --btn-text: #FFFFFF; --text-main: #ECFDF5; --glow-color: rgba(16, 185, 129, 0.12); }
+    .theme-obsidian { --bg-night: #09090b; --bg-surface: #18181b; --border-hairline: rgba(255, 255, 255, 0.1); --accent-color: #FAFAFA; --btn-text: #09090b; --text-main: #FAFAFA; --glow-color: rgba(250, 250, 250, 0.08); }
+    .theme-crimson { --bg-night: #1c0505; --bg-surface: #2d0b0b; --border-hairline: rgba(248, 113, 113, 0.15); --accent-color: #EF4444; --btn-text: #FFFFFF; --text-main: #FEF2F2; --glow-color: rgba(239, 68, 68, 0.12); }
+    body { background-color: var(--bg-night); color: var(--text-main); font-family: 'Clash Display', sans-serif; overflow-x: hidden; }
+    .font-heading { font-family: 'Clash Display', sans-serif; }
+    .grid-bg-pattern { background-image: linear-gradient(to right, var(--border-hairline) 1px, transparent 1px), linear-gradient(to bottom, var(--border-hairline) 1px, transparent 1px); background-size: 32px 32px; }
+    .bento-glass { background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%); backdrop-filter: blur(30px); box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 var(--border-hairline); }
+    .ambient-glow { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%); pointer-events: none; z-index: 0; }
+    aside{
+      font-family: 'Clash Display', sans-serif;
+    }
+  </style>
+</head>
+<body class="theme-sapphire min-h-screen flex flex-col md:flex-row selection:bg-accent/30 selection:text-white grid-bg-pattern">
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="fixed md:sticky bottom-0 md:top-0 left-0 right-0 md:w-64 md:h-screen bg-night/95 md:bg-night/85 backdrop-blur-2xl border-t md:border-t-0 md:border-r border-hairline p-3 md:p-6 z-50 flex md:flex-col justify-between items-center md:items-stretch shrink-0 shadow-2xl md:shadow-none">
+    <div class="hidden md:flex flex-col space-y-8 w-full">
+      <div class="flex items-center justify-between">
+        <a href="home.html" class="flex items-center gap-3 group">
+          <span class="w-3 h-3 bg-accent rounded-sm group-hover:scale-125 transition-transform duration-300 shadow-lg shadow-accent/40"></span>
+          <span class="font-heading text-xl font-bold tracking-widest uppercase text-white">Moments</span>
+        </a>
+      </div>
+
+      <!-- User Account Info -->
+      <div class="bento-glass rounded-2xl p-3.5 border border-hairline space-y-1.5">
+        <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+          <span>CURRENT USER</span>
+          <span id="sidebar-tier-badge" class="px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20">SYNCING...</span>
+        </div>
+        <div id="sidebar-username" class="font-heading text-sm font-bold text-white truncate">Loading...</div>
+      </div>
+
+      <nav class="space-y-1.5">
+        <a href="home.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          <span>Home</span>
+        </a>
+        <a href="compose.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>Compose</span>
+        </a>
+        <a href="monami.html" id="nav-monami-link" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <span>Monami AI</span>
+          </div>
+          <span class="text-[9px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20 font-mono">PRO</span>
+        </a>
+        <a href="identity-match.html" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <span>Identity Matcher</span>
+          </div>
+          <span class="text-[9px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20 font-mono">PREMIUM</span>
+        </a>
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <span>Profile</span>
+        </a>
+        <a href="upgrade.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-surface/80 text-white font-medium text-xs border border-hairline shadow-sm">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span class="font-semibold text-amber-400">Upgrade Plan</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="flex md:hidden w-full justify-around items-center py-1">
+      <a href="home.html" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-[9px] font-mono">Home</span>
+      </a>
+      <a href="compose.html" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        <span class="text-[9px] font-mono">Compose</span>
+      </a>
+      <a href="monami.html" id="mobile-nav-monami-link" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <span class="text-[9px] font-mono">Monami</span>
+      </a>
+      <a href="profile.html" class="p-2 text-slate-400 hover:text-white flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+        <span class="text-[9px] font-mono">Profile</span>
+      </a>
+      <a href="upgrade.html" class="p-2 text-amber-400 flex flex-col items-center gap-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <span class="text-[9px] font-mono">Upgrade</span>
+      </a>
+    </div>
+
+    <div class="hidden md:block space-y-3 pt-6 border-t border-hairline w-full">
+      <button onclick="cycleTheme()" class="w-full px-3.5 py-2.5 border border-hairline bg-surface/30 hover:bg-surface/60 text-slate-400 hover:text-white transition-all rounded-xl flex items-center justify-between text-xs">
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span><span>Themes</span></span>
+        <strong id="sidebar-theme-tag" class="text-white text-[10px] uppercase font-mono">Sapphire</strong>
+      </button>
+      <button id="logout-btn" class="w-full px-3.5 py-2 text-left text-red-400 hover:text-red-300 font-mono text-[10px] uppercase transition-colors rounded-xl hover:bg-red-500/10">Log Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE Content -->
+  <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-12 md:py-20 mb-28 md:mb-0 relative space-y-8">
+    <div class="ambient-glow -top-10 -left-10"></div>
+
+    <div class="text-center space-y-3 relative z-10 max-w-xl mx-auto">
+      <span class="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-mono uppercase tracking-widest">Network Access Levels</span>
+      <h1 class="font-heading text-3xl sm:text-4xl font-bold text-white">Choose Your Plan</h1>
+      <p class="text-xs text-slate-400 font-light">Select the target performance tier for your interface infrastructure.</p>
+    </div>
+
+    <!-- NOTIFICATION ACCORDION BANNER -->
+    <div id="status-notification" class="hidden max-w-md mx-auto p-4 border rounded-2xl font-mono text-xs text-center relative z-10"></div>
+
+    <!-- THREE TIER PRICING GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 pt-4">
+
+      <!-- Tier 1: Free -->
+      <div id="card-free" class="bento-glass rounded-3xl p-8 space-y-6 border border-hairline flex flex-col justify-between transition-all">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-slate-400 tracking-wider">Free Node</span>
+            <span class="tier-indicator-badge text-[9px] font-mono uppercase px-2 py-0.5 rounded border border-hairline text-slate-500 hidden">Active</span>
+          </div>
+          <div class="flex items-baseline gap-1"><span class="font-heading text-4xl font-bold text-white">$0</span><span class="text-xs text-slate-500 font-mono">/ forever</span></div>
+          <p class="text-xs text-slate-400">Our basic structural alignment features are available.</p>
+          <ul class="space-y-2.5 text-xs text-slate-300 font-light pt-2">
+            <li class="flex items-center gap-2">✓ Post a moment: 3/day</li>
+            <li class="flex items-center gap-2">✓ Reply with a story: 3/day</li>
+            <li class="flex items-center gap-2">✓ Upvote: unlimited (counts hidden)</li>
+            <li class="flex items-center gap-2">✓ Connect: 1 person/day, random match</li>
+            <li class="flex items-center gap-2 text-slate-500">✕ Monami AI Access</li>
+          </ul>
+        </div>
+        <button id="btn-free" class="w-full py-3 rounded-xl bg-surface border border-hairline text-slate-300 text-xs font-mono uppercase hover:bg-surface/80 transition-all">Select Free Tier</button>
+      </div>
+
+      <!-- Tier 2: Premium -->
+      <div id="card-premium" class="bento-glass rounded-3xl p-8 space-y-6 border border-hairline flex flex-col justify-between transition-all">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-blue-400 tracking-wider">Premium Node</span>
+            <span class="tier-indicator-badge text-[9px] font-mono uppercase px-2 py-0.5 rounded border border-hairline text-slate-500 hidden">Active</span>
+          </div>
+          <div class="flex items-baseline gap-1"><span class="font-heading text-4xl font-bold text-white">$19</span><span class="text-xs text-slate-400 font-mono">/ month</span></div>
+          <p class="text-xs text-slate-300">Expanded capacity and interest-based connection matching.</p>
+          <ul class="space-y-2.5 text-xs text-slate-200 font-light pt-2">
+            <li class="flex items-center gap-2">✓ Post a moment: 5/day</li>
+            <li class="flex items-center gap-2">✓ Reply with a story: 5/day</li>
+            <li class="flex items-center gap-2">✓ Upvote: unlimited</li>
+            <li class="flex items-center gap-2">✓ Connect: unlimited, random match</li>
+            <li class="flex items-center gap-2">✓ Interest-based matching </li>
+            <li class="flex items-center gap-2 text-slate-500">✕ Monami: static starter prompts only</li>
+          </ul>
+        </div>
+        <button id="btn-premium" class="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-lg shadow-blue-600/20">Upgrade to Premium</button>
+      </div>
+
+      <!-- Tier 3: Pro -->
+      <div id="card-pro" class="bento-glass rounded-3xl p-8 space-y-6 border border-amber-500/30 bg-gradient-to-b from-amber-500/5 via-transparent to-transparent flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all">
+        <div class="absolute top-0 right-0 bg-amber-500 text-night text-[9px] font-mono font-bold uppercase tracking-widest px-4 py-1 rounded-bl-xl">Popular</div>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-amber-400 tracking-wider">Monami Pro</span>
+            <span class="tier-indicator-badge text-[9px] font-mono uppercase px-2 py-0.5 rounded border border-hairline text-slate-500 hidden">Active</span>
+          </div>
+          <div class="flex items-baseline gap-1"><span class="font-heading text-4xl font-bold text-white">$29</span><span class="text-xs text-slate-400 font-mono">/ month</span></div>
+          <p class="text-xs text-slate-300">Complete AI augmented metrics and advanced network connection throughput.</p>
+          <ul class="space-y-2.5 text-xs text-slate-200 font-light pt-2">
+            <li class="flex items-center gap-2">✓ Post a moment: unlimited</li>
+            <li class="flex items-center gap-2">✓ Reply with a story: unlimited</li>
+            <li class="flex items-center gap-2">✓ Upvote: unlimited</li>
+            <li class="flex items-center gap-2">✓ Connect: unlimited, interest-based</li>
+            <li class="flex items-center gap-2">✓ Monami (AI): full live version</li>
+          </ul>
+        </div>
+        <button id="btn-pro" class="w-full py-3 rounded-xl bg-amber-500 text-night text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-lg shadow-amber-500/20">Upgrade to Pro</button>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const themes = ['sapphire', 'emerald', 'obsidian', 'crimson'];
+    let currentThemeIdx = 0;
+    function setTheme(themeName) {
+      document.body.className = `theme-${themeName} min-h-screen flex flex-col md:flex-row selection:bg-accent/30 selection:text-white grid-bg-pattern`;
+      if (document.getElementById('sidebar-theme-tag')) document.getElementById('sidebar-theme-tag').innerText = themeName;
+      localStorage.setItem('ciphree_preferred_theme', themeName);
+      currentThemeIdx = themes.indexOf(themeName);
+    }
+    function cycleTheme() { currentThemeIdx = (currentThemeIdx + 1) % themes.length; setTheme(themes[currentThemeIdx]); }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem('ciphree_preferred_theme');
+      if (saved && themes.includes(saved)) setTheme(saved);
+
+      const activeUserName = localStorage.getItem("moments_authenticated_user_name") || "User";
+      if (document.getElementById("sidebar-username")) {
+        document.getElementById("sidebar-username").innerText = activeUserName;
+      }
+    });
+  </script>
+
+  <!-- INTEGRATED DATABASE COUPLING CORE SCRIPT (now driven by Paddle instead of Chapa) -->
+  <script type="module">
+  import { db } from './firebase-config.js';
+  import { doc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const authenticatedUserId = localStorage.getItem("moments_authenticated_user_id");
+  if (!authenticatedUserId) {
+    window.location.href = "login.html";
+  }
+
+  let currentUserTier = "free";
+
+  // ---------------------------------------------------------------------
+  // PADDLE SETUP
+  // ---------------------------------------------------------------------
+  // 1. Get your client-side token from Paddle Dashboard > Developer Tools > Authentication.
+  // 2. Create two Prices in Paddle Dashboard (Premium $19/mo, Pro $29/mo) and paste their
+  //    Price IDs below. Price IDs look like "pri_01h....".
+  // 3. Flip Paddle.Environment.set("sandbox") to "production" when you go live.
+  const PADDLE_CLIENT_TOKEN = "live_771b5eb5e06338d60db6d8e5ec8";
+  const PADDLE_PRICE_IDS = {
+    premium: "pri_YOUR_PREMIUM_PRICE_ID", // TODO: paste your live Premium Price ID
+    pro: "pri_YOUR_PRO_PRICE_ID"          // TODO: paste your live Pro Price ID
+  };
+  // Reverse lookup: price ID -> tier name, used when Paddle hands back checkout data
+  const PRICE_ID_TO_TIER = Object.fromEntries(
+    Object.entries(PADDLE_PRICE_IDS).map(([tier, priceId]) => [priceId, tier])
+  );
+
+  // This is a live/production token, so we run against production, not sandbox.
+  Paddle.Environment.set("production");
+  Paddle.Initialize({
+    token: PADDLE_CLIENT_TOKEN,
+    eventCallback: async function (event) {
+      // Fires for every step of the Paddle overlay checkout lifecycle.
+      if (event.name === "checkout.completed") {
+        // Paddle's checkout.completed fires client-side the instant payment succeeds.
+        // This is good enough for instant UI feedback, but the SOURCE OF TRUTH for
+        // entitlement should be your backend's `subscription.activated` / `transaction.completed`
+        // webhook (see note below `handleCheckout`). Client-side confirmation can be spoofed
+        // or missed (closed tab, network drop) — don't rely on it alone in production.
+        const items = event.data?.items || [];
+        const priceId = items[0]?.price?.id;
+        const tier = event.data?.custom_data?.tier || PRICE_ID_TO_TIER[priceId];
+
+        if (tier) {
+          await applyTierUpgrade(tier);
+        }
+        Paddle.Checkout.close();
+      }
+    }
+  });
+
+  function showNotification(text, type) {
+    const banner = document.getElementById('status-notification');
+    banner.innerText = text;
+    banner.className = `max-w-md mx-auto p-4 border rounded-2xl font-mono text-xs text-center relative z-10 ${
+      type === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'
+    }`;
+    banner.classList.remove('hidden');
+  }
+
+  function updateSidebarTierBadge(tier) {
+    const badge = document.getElementById("sidebar-tier-badge");
+    if (!badge) return;
+    badge.innerText = tier.toUpperCase();
+    if (tier === 'pro') {
+      badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20";
+    } else if (tier === 'premium') {
+      badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20";
+    } else if (tier === 'enterprise') {
+      badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30";
+    } else {
+      badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20";
+    }
+  }
+
+  function updateTierUI(tier) {
+    currentUserTier = tier;
+    updateSidebarTierBadge(tier);
+
+    ['free', 'premium', 'pro'].forEach(t => {
+      const card = document.getElementById(`card-${t}`);
+      const actionBtn = document.getElementById(`btn-${t}`);
+      const badge = card?.querySelector('.tier-indicator-badge');
+
+      if (card && actionBtn && badge) {
+        if (t === tier) {
+          card.classList.add('border-accent', 'ring-1', 'ring-accent/50');
+          badge.classList.remove('hidden');
+          badge.className = "tier-indicator-badge text-[9px] font-mono uppercase px-2 py-0.5 rounded border border-accent/40 bg-accent/10 text-accent font-semibold";
+          actionBtn.innerText = "Current Protocol";
+          actionBtn.disabled = true;
+          actionBtn.className = "w-full py-3 rounded-xl bg-surface/50 border border-hairline text-slate-500 text-xs font-mono uppercase cursor-not-allowed";
+        } else {
+          card.classList.remove('border-accent', 'ring-1', 'ring-accent/50');
+          badge.classList.add('hidden');
+          actionBtn.disabled = false;
+          if (t === 'free') {
+            actionBtn.innerText = "Select Free Tier";
+            actionBtn.className = "w-full py-3 rounded-xl bg-surface border border-hairline text-slate-300 text-xs font-mono uppercase hover:bg-surface/80 transition-all";
+          } else if (t === 'premium') {
+            actionBtn.innerText = "Upgrade to Premium";
+            actionBtn.className = "w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-lg shadow-blue-600/20";
+          } else if (t === 'pro') {
+            actionBtn.innerText = "Upgrade to Pro";
+            actionBtn.className = "w-full py-3 rounded-xl bg-amber-500 text-night text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-lg shadow-amber-500/20";
+          }
+        }
+      }
+    });
+  }
+
+  // Writes the new tier to Firestore and refreshes the UI. Called on client-side
+  // checkout.completed for instant feedback. In production this same write should
+  // also happen (idempotently) from your backend when it receives Paddle's
+  // `subscription.activated` webhook, so entitlement isn't solely client-trusted.
+  async function applyTierUpgrade(tier) {
+    try {
+      const userDocRef = doc(db, "users", authenticatedUserId);
+      await updateDoc(userDocRef, { userTier: tier });
+      updateTierUI(tier);
+      showNotification(`Identity protocol successfully synced to ${tier.toUpperCase()}!`, "success");
+    } catch (error) {
+      console.error("Error committing upgrade sync:", error);
+      showNotification("Account profile data sync error. Features may lag.", "error");
+    }
+  }
+
+  window.handleCheckout = async function (tier) {
+    try {
+      const userDocRef = doc(db, "users", authenticatedUserId);
+      const userSnapshot = await getDoc(userDocRef);
+
+      if (!userSnapshot.exists()) {
+        alert("Account reference corrupted. Please log back in.");
+        return;
+      }
+
+      const userData = userSnapshot.data();
+      const activeUserTier = userData.userTier || 'free';
+
+      if (tier === activeUserTier) return;
+
+      if (tier === 'free') {
+        // Downgrading to free: in production, call your backend so it can cancel
+        // the active Paddle subscription (Paddle.Subscriptions API) before you
+        // flip the Firestore flag — otherwise the user keeps being billed.
+        await updateDoc(userDocRef, { userTier: 'free' });
+        updateTierUI('free');
+        showNotification("Account scaled down to Free tier protocol.", "success");
+        return;
+      }
+
+      const priceId = PADDLE_PRICE_IDS[tier];
+      if (!priceId) {
+        showNotification("Plan not configured. Contact support.", "error");
+        return;
+      }
+
+      const userEmail = 'elan.mpr@gmail.com';
+      const userName = 'Kidus Moges';
+
+      // Open Paddle's overlay checkout. custom_data.tier is echoed back on
+      // checkout.completed and (more importantly) in your backend webhook payload,
+      // so you always know which tier a given transaction was for.
+      Paddle.Checkout.open({
+        items: [{ priceId: priceId, quantity: 1 }],
+        customer: { email: userEmail },
+        customData: {
+          tier: tier,
+          userId: authenticatedUserId
+        },
+        settings: {
+          displayMode: "overlay",
+          theme: "dark",
+          successUrl: `${window.location.origin}${window.location.pathname}`
+        }
+      });
+
+    } catch (error) {
+      console.error("Failed to open Paddle checkout: ", error);
+      showNotification("Transaction pipeline dropped. Check network channels.", "error");
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    ['free', 'premium', 'pro'].forEach(t => {
+      const targetBtn = document.getElementById(`btn-${t}`);
+      if (targetBtn) {
+        targetBtn.addEventListener('click', () => window.handleCheckout(t));
+      }
+    });
+
+    const userDocRef = doc(db, "users", authenticatedUserId);
+
+    onSnapshot(userDocRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const userData = snapshot.data();
+        const liveTier = userData.userTier || 'free';
+        localStorage.setItem("moments_user_tier", liveTier);
+        updateTierUI(liveTier);
+      } else {
+        const fallback = localStorage.getItem("moments_user_tier") || "free";
+        updateTierUI(fallback);
+      }
+    }, (error) => {
+      console.error("Firestore sync error:", error);
+      const badge = document.getElementById("sidebar-tier-badge");
+      if (badge) {
+        badge.innerText = "OFFLINE";
+        badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-red-500/10 text-red-400 border border-red-500/20";
+      }
+      const fallback = localStorage.getItem("moments_user_tier") || "free";
+      updateTierUI(fallback);
+    });
+
+    document.getElementById("logout-btn")?.addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "login.html";
+    });
+  });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
+  </script>
+</body>
+</html>

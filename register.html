@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments| Register</title>
+  <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#3B82F6">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            night: 'var(--bg-night)',
+            surface: 'var(--bg-surface)',
+            hairline: 'var(--border-hairline)',
+            accent: 'var(--accent-color)',
+            btntext: 'var(--btn-text)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Clash Display';
+      src: url('https://api.fontshare.com/v2/fonts/download/clash-display') format('woff2');
+      font-weight: 500 700;
+      font-display: swap;
+      font-style: normal;
+    }
+
+    :root {
+      --bg-night: #030712;
+      --bg-surface: #0B132B;
+      --border-hairline: rgba(255, 255, 255, 0.07);
+      --accent-color: #3B82F6;
+      --btn-text: #FFFFFF;
+      --text-main: #F1F5F9;
+    }
+
+    * {
+      font-family: 'Clash Display', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      letter-spacing: -0.01em;
+    }
+
+    body {
+      background-color: var(--bg-night);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .grid-bg {
+      background-image: linear-gradient(var(--border-hairline) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--border-hairline) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: center center;
+    }
+
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.005) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Override autofill to strictly use the bg-night color variable */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: #FFFFFF !important;
+      -webkit-box-shadow: 0 0 0px 1000px var(--bg-night) inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+  </style>
+</head>
+<body class="min-h-screen grid-bg flex items-center justify-center p-4 sm:p-6 selection:bg-accent/30 selection:text-white">
+
+  <!-- REGISTER INTERFACE CARD -->
+  <main class="w-full max-w-md glass-card border border-hairline rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl animate-fadeIn">
+    
+    <!-- HEADER -->
+    <div class="space-y-2 text-center">
+      <div class="inline-flex items-center gap-2.5 mx-auto">
+        <span class="w-2.5 h-2.5 bg-accent rounded-sm animate-pulse"></span>
+        <span class="text-xs font-bold tracking-widest uppercase text-white">Moments Network</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-2">Initialize Profile</h1>
+      <p class="text-xs text-slate-400 font-light tracking-wide">Enter a display name and a unique 7-digit numerical code passcode to secure your reflections.</p>
+    </div>
+
+    <!-- ERROR BANNER TARGET -->
+    <div id="error-banner" class="hidden p-3 bg-red-500/10 border border-red-500/20 text-red-400 font-mono text-[11px] rounded-xl flex items-center gap-2">
+      <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+      <span id="error-message"></span>
+    </div>
+
+    <!-- REGISTRATION FORM -->
+    <form id="register-form" class="space-y-4">
+      
+      <!-- NAME FIELD -->
+      <div class="space-y-1.5">
+        <label for="user-name" class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Display Name</label>
+        <input 
+          type="text" 
+          id="user-name" 
+          required 
+          autocomplete="off"
+          placeholder="e.g., Anonymous Contributor" 
+          class="w-full bg-night border border-hairline p-3.5 text-xs text-white rounded-xl focus:outline-none focus:border-accent/60 transition-colors placeholder:text-slate-600"
+        >
+      </div>
+
+      <!-- PASSWORD FIELD (7 DIGIT NUMERIC ENFORCED) -->
+      <div class="space-y-1.5">
+        <label for="user-passcode" class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Numerical Passcode (7 Digits)</label>
+        <input 
+          type="password" 
+          id="user-passcode" 
+          required 
+          inputmode="numeric"
+          pattern="[0-9]{7}"
+          maxlength="7"
+          placeholder="•••••••" 
+          class="w-full bg-night border border-hairline p-3.5 text-xs text-white rounded-xl tracking-[0.5em] text-center font-mono focus:outline-none focus:border-accent/60 transition-colors placeholder:text-slate-600"
+        >
+        <span class="text-[9px] font-mono text-slate-500 block pt-0.5">Must consist explicitly of digits 0-9.</span>
+      </div>
+
+      <!-- PRIVACY DISCLAIMER -->
+      <p class="text-[10px] text-slate-500 font-light italic leading-relaxed text-center pt-2">
+        Zero metrics tracked. Passcode values are cryptographically layered into local runtime streams.
+      </p>
+
+      <!-- SUBMIT TRANSACTION BUTTON -->
+      <button 
+        type="submit" 
+        id="submit-btn" 
+        class="w-full py-3.5 bg-accent text-btntext text-xs font-semibold uppercase tracking-wider rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg shadow-accent/10"
+      >
+        <span>Establish Account Connection</span>
+      </button>
+
+    </form>
+
+    <!-- ALTERNATIVE ROUTING ACCORDION -->
+    <div class="pt-4 border-t border-hairline text-center">
+      <p class="text-[11px] text-slate-400">
+        Already registered inside the matrix? 
+        <a href="login.html" class="text-accent font-medium hover:underline ml-1">Authenticate Identity</a>
+      </p>
+    </div>
+
+  </main>
+
+  <!-- INTEGRATED FIREBASE & LOCAL TRANSACTION CONTROLLER -->
+  <script type="module">
+    import { db, collection } from './firebase-config.js';
+    import { addDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const registerForm = document.getElementById('register-form');
+    const nameInput = document.getElementById('user-name');
+    const passcodeInput = document.getElementById('user-passcode');
+    const errorBanner = document.getElementById('error-banner');
+    const errorMessage = document.getElementById('error-message');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Filter keyboard events dynamically on the input layer to force pure digits natively
+    passcodeInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+
+    function displayPipelineError(msg) {
+      errorMessage.innerText = msg;
+      errorBanner.classList.remove('hidden');
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    }
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBanner.classList.add('hidden');
+      
+      const displayName = nameInput.value.trim();
+      const passcode = passcodeInput.value.trim();
+
+      if (passcode.length !== 7 || !/^\d+$/.test(passcode)) {
+        displayPipelineError("Identity execution dropped: Passcode must be exactly 7 numbers.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
+
+      try {
+        const accountsRef = collection(db, "users");
+        const nameQuery = query(accountsRef, where("username", "==", displayName.toLowerCase()));
+        const checkSnapshot = await getDocs(nameQuery);
+
+        if (!checkSnapshot.empty) {
+          displayPipelineError("Identity conflict: This display name is already taken.");
+          return;
+        }
+
+        // Complete schema creation including default user tier allocation
+        const newUserDoc = await addDoc(accountsRef, {
+          displayName: displayName,
+          username: displayName.toLowerCase(),
+          passcodeHash: btoa(passcode),
+          userTier: 'free',
+          createdAt: serverTimestamp()
+        });
+
+        localStorage.setItem("moments_authenticated_user_id", newUserDoc.id);
+        localStorage.setItem("moments_authenticated_user_name", displayName);
+
+        window.location.href = "home.html";
+
+      } catch (error) {
+        console.error("Identity collection generation transaction fault:", error);
+        displayPipelineError("Database mapping failed. Check connection channels.");
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("moments_authenticated_user_id")) {
+        window.location.href = "home.html";
+      }
+    });
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
+  </script>
+</body>
+</html>

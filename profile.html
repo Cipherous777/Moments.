@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moments — Profile Protocol</title>
+  <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#3B82F6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Clash Display"', 'sans-serif'],
+            body: ['"Clash Display"', 'sans-serif'],
+          },
+          colors: {
+            night: 'var(--bg-night)',
+            surface: 'var(--bg-surface)',
+            hairline: 'var(--border-hairline)',
+            accent: 'var(--accent-color)',
+            btntext: 'var(--btn-text)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root, .theme-sapphire {
+      --bg-night: #030712;
+      --bg-surface: #0B132B;
+      --border-hairline: rgba(255, 255, 255, 0.07);
+      --accent-color: #3B82F6;
+      --btn-text: #FFFFFF;
+      --text-main: #F1F5F9;
+      --glow-color: rgba(59, 130, 246, 0.12);
+    }
+
+    .theme-emerald {
+      --bg-night: #022c22;
+      --bg-surface: #064e3b;
+      --border-hairline: rgba(52, 211, 153, 0.15);
+      --accent-color: #10B981;
+      --btn-text: #FFFFFF;
+      --text-main: #ECFDF5;
+      --glow-color: rgba(16, 185, 129, 0.12);
+    }
+
+    .theme-obsidian {
+      --bg-night: #09090b;
+      --bg-surface: #18181b;
+      --border-hairline: rgba(255, 255, 255, 0.1);
+      --accent-color: #FAFAFA;
+      --btn-text: #09090b;
+      --text-main: #FAFAFA;
+      --glow-color: rgba(250, 250, 250, 0.08);
+    }
+
+    .theme-crimson {
+      --bg-night: #1c0505;
+      --bg-surface: #2d0b0b;
+      --border-hairline: rgba(248, 113, 113, 0.15);
+      --accent-color: #EF4444;
+      --btn-text: #FFFFFF;
+      --text-main: #FEF2F2;
+      --glow-color: rgba(239, 68, 68, 0.12);
+    }
+
+    body {
+      background-color: var(--bg-night);
+      color: var(--text-main);
+      font-family: 'Clash Display', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+ aside{
+      font-family: 'Clash Display', sans-serif;
+    }
+    .font-heading { font-family: 'Clash Display', sans-serif; }
+    
+    /* Grid background pattern layered over the bespoke backdrop */
+    .grid-bg-pattern {
+      background-image: 
+        linear-gradient(to right, var(--border-hairline) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border-hairline) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .bento-glass {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 var(--border-hairline);
+    }
+
+    .ambient-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--glow-color) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .active-tab-pill {
+      background: var(--accent-color);
+      color: var(--btn-text);
+      box-shadow: 0 0 25px var(--border-hairline);
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-night); }
+    ::-webkit-scrollbar-thumb { background: var(--border-hairline); border-radius: 9999px; }
+  </style>
+</head>
+<body class="theme-sapphire min-h-screen flex flex-col md:flex-row selection:bg-accent/30 selection:text-white grid-bg-pattern">
+
+  <!-- UNIFIED DESKTOP SIDEBAR -->
+  <aside class="hidden md:flex flex-col justify-between w-64 h-screen sticky top-0 border-r border-hairline bg-night/80 backdrop-blur-2xl p-6 z-40">
+    <div class="space-y-6 w-full">
+      <div class="flex items-center justify-between">
+        <a href="home.html" class="flex items-center gap-3 group">
+          <span class="w-3 h-3 bg-accent rounded-sm group-hover:scale-125 transition-transform duration-300 shadow-lg shadow-accent/40"></span>
+          <span class="font-heading text-xl font-bold tracking-widest uppercase text-white">Moments</span>
+        </a>
+      </div>
+
+      <!-- Tier & User Badge at Top -->
+      <div class="bento-glass rounded-2xl p-3 border border-hairline space-y-1">
+        <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+          <span>TIER</span>
+          <span id="sidebar-tier-badge" class="px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/25">FREE</span>
+        </div>
+        <div id="sidebar-username" class="font-heading text-xs font-bold text-white truncate">Loading...</div>
+      </div>
+
+      <nav class="space-y-1.5">
+        <a href="home.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs group">
+          <svg class="w-4 h-4 group-hover:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          <span>Home</span>
+        </a>
+
+        <a href="compose.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs group">
+          <svg class="w-4 h-4 group-hover:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>Compose</span>
+        </a>
+
+        <a href="monami.html" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-slate-400 hover:text-white transition-all text-xs group">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 group-hover:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <span>Monami</span>
+          </div>
+          <span class="text-[9px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20 font-mono">PRO</span>
+        </a>
+        <a href="identity-match.html" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-surface/80 text-slate-400 font-medium text-xs">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <span>Identity Matcher</span>
+          </div>
+          <span class="text-[9px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20 font-mono">PREMIUM</span>
+        </a>
+
+        <a href="profile.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-surface/80 text-white font-medium text-xs border border-hairline shadow-sm">
+          <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <span>Profile</span>
+        </a>
+
+        <a href="upgrade.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface/50 text-amber-400 hover:text-amber-300 transition-all text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span class="font-semibold">Upgrade Plan</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="space-y-3 pt-6 border-t border-hairline w-full">
+      <button onclick="cycleTheme()" class="w-full px-3.5 py-2.5 border border-hairline bg-surface/30 hover:bg-surface/60 text-slate-400 hover:text-white transition-all rounded-xl flex items-center justify-between text-xs">
+        <span class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+          <span>Theme</span>
+        </span>
+        <strong id="sidebar-theme-tag" class="text-white text-[10px] uppercase font-mono tracking-wider">Sapphire</strong>
+      </button>
+
+      <button id="logout-btn-desktop" class="w-full px-3.5 py-2 text-left text-red-400 hover:text-red-300 font-mono text-[10px] uppercase tracking-wider transition-colors rounded-xl hover:bg-red-500/10">
+        Log out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MOBILE TOP BAR -->
+  <header class="md:hidden sticky top-0 z-40 bg-night/90 backdrop-blur-2xl border-b border-hairline px-5 py-4 flex items-center justify-between">
+    <a href="home.html" class="flex items-center gap-2.5">
+      <span class="w-2.5 h-2.5 bg-accent rounded-sm"></span>
+      <span class="font-heading text-sm font-bold tracking-widest uppercase text-white">Moments</span>
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="upgrade.html" class="px-3 py-1.5 bg-accent text-btntext text-[10px] font-bold uppercase rounded-lg">Upgrade</a>
+      <button onclick="cycleTheme()" class="p-2 border border-hairline bg-surface/50 rounded-lg text-xs">🎨</button>
+    </div>
+  </header>
+
+  <!-- IMMERSIVE BENTO GRID PROFILE MAIN VIEW -->
+  <main class="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-8 py-12 md:py-16 mb-24 md:mb-0 space-y-8 relative">
+    
+    <div class="ambient-glow -top-10 -left-10"></div>
+    <div class="ambient-glow top-1/2 -right-10"></div>
+
+    <!-- RADICAL ASYMMETRICAL BENTO GRID HERO SECTION -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
+      
+      <!-- Identity Tile (Spans full width on mobile, fills grid structure) -->
+      <div class="md:col-span-2 bento-glass rounded-3xl p-6 sm:p-8 flex flex-col justify-between border border-hairline relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-transparent pointer-events-none"></div>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative z-10">
+          <div class="flex items-center gap-5">
+            <div id="profile-avatar" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-night border border-hairline flex items-center justify-center text-accent font-heading font-bold text-4xl shadow-2xl shrink-0">⚡</div>
+            <div class="space-y-1.5">
+              <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-surface border border-hairline text-[10px] font-mono text-accent">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent animate-ping"></span>
+                Verified Account
+              </div>
+              <h1 id="profile-name" class="font-heading text-2xl sm:text-3xl font-bold text-white tracking-tight">Loading...</h1>
+              <p id="profile-handle" class="text-xs text-slate-400 font-mono tracking-wider">@anonymous</p>
+            </div>
+          </div>
+          <button id="logout-btn-mobile" class="px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:text-red-300 font-mono text-[10px] uppercase tracking-wider transition-all rounded-xl hover:bg-red-500/20 self-end sm:self-center">
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Metrics Pod 1: Stories -->
+      <div class="bento-glass rounded-3xl p-6 border border-hairline group hover:border-accent/40 transition-all duration-300 flex flex-col justify-between">
+        <span class="text-slate-400 font-mono uppercase tracking-widest text-[10px]">Stories</span>
+        <strong id="counter-stories" class="font-heading text-4xl text-white tracking-tight group-hover:text-accent transition-colors pt-4">0</strong>
+      </div>
+
+      <!-- Metrics Pod 2: Moments Frameworks -->
+      <div class="bento-glass rounded-3xl p-6 border border-hairline group hover:border-accent/40 transition-all duration-300 flex flex-col justify-between">
+        <span class="text-slate-400 font-mono uppercase tracking-widest text-[10px]">Moments</span>
+        <strong id="counter-moments" class="font-heading text-4xl text-white tracking-tight group-hover:text-accent transition-colors pt-4">0</strong>
+      </div>
+
+    </section>
+
+    <!-- FLOATING TAB SWITCHER -->
+    <div class="flex items-center justify-center p-1.5 bento-glass rounded-2xl max-w-sm mx-auto border border-hairline relative z-10">
+      <button id="tab-stories" onclick="switchTab('stories')" class="flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold active-tab-pill transition-all text-center tracking-wider uppercase">
+        Stories (<span id="tab-count-stories">0</span>)
+      </button>
+      <button id="tab-moments" onclick="switchTab('moments')" class="flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold text-slate-400 hover:text-white transition-all text-center tracking-wider uppercase">
+        Moments (<span id="tab-count-moments">0</span>)
+      </button>
+    </div>
+
+    <!-- CONTENT STREAM CONTAINERS -->
+    <div id="content-stories" class="space-y-4 relative z-10">
+      <div id="stories-loading-placeholder" class="bento-glass rounded-3xl text-center py-16 text-xs font-mono text-slate-500 border border-hairline">Loading...</div>
+    </div>
+
+    <div id="content-moments" class="hidden space-y-4 relative z-10">
+      <div id="moments-loading-placeholder" class="bento-glass rounded-3xl text-center py-16 text-xs font-mono text-slate-500 border border-hairline">Loading...</div>
+    </div>
+  </main>
+
+  <!-- THEME & TAB CONTROLLERS -->
+  <script>
+    const themes = ['sapphire', 'emerald', 'obsidian', 'crimson'];
+    let currentThemeIdx = 0;
+
+    function setTheme(themeName) {
+      document.body.className = `theme-${themeName} min-h-screen flex flex-col md:flex-row selection:bg-accent/30 selection:text-white grid-bg-pattern`;
+      document.getElementById('sidebar-theme-tag').innerText = themeName;
+      localStorage.setItem('ciphree_preferred_theme', themeName);
+      currentThemeIdx = themes.indexOf(themeName);
+    }
+
+    function cycleTheme() {
+      currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+      setTheme(themes[currentThemeIdx]);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem('ciphree_preferred_theme');
+      if (saved && themes.includes(saved)) {
+        setTheme(saved);
+      }
+    });
+
+    function switchTab(tab) {
+      const tabStories = document.getElementById('tab-stories');
+      const tabMoments = document.getElementById('tab-moments');
+      const contentStories = document.getElementById('content-stories');
+      const contentMoments = document.getElementById('content-moments');
+
+      if (tab === 'stories') {
+        tabStories.className = "flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold active-tab-pill transition-all text-center tracking-wider uppercase";
+        tabMoments.className = "flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold text-slate-400 hover:text-white transition-all text-center tracking-wider uppercase";
+        contentStories.classList.remove('hidden');
+        contentMoments.classList.add('hidden');
+      } else {
+        tabMoments.className = "flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold active-tab-pill transition-all text-center tracking-wider uppercase";
+        tabStories.className = "flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold text-slate-400 hover:text-white transition-all text-center tracking-wider uppercase";
+        contentMoments.classList.remove('hidden');
+        contentStories.classList.add('hidden');
+      }
+    }
+  </script>
+
+  <!-- FIREBASE DATA SYNC CONTROLLER -->
+  <script type="module">
+    import { db, collection } from './firebase-config.js';
+    import { doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const activeUserId = localStorage.getItem("moments_authenticated_user_id");
+    if (!activeUserId) {
+      window.location.href = "login.html";
+    }
+
+    const nameEl = document.getElementById("profile-name");
+    const handleEl = document.getElementById("profile-handle");
+    const avatarEl = document.getElementById("profile-avatar");
+    const counterStories = document.getElementById("counter-stories");
+    const counterMoments = document.getElementById("counter-moments");
+    const tabCountStories = document.getElementById("tab-count-stories");
+    const tabCountMoments = document.getElementById("tab-count-moments");
+    
+    const storiesContainer = document.getElementById("content-stories");
+    const momentsContainer = document.getElementById("content-moments");
+
+    async function loadProfileNode() {
+      try {
+        const userRef = doc(db, "users", activeUserId);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          nameEl.textContent = data.displayName || "Node Entity";
+          handleEl.textContent = `@${data.username || "anonymous"}`;
+          avatarEl.textContent = (data.displayName || "N").charAt(0).toUpperCase();
+        }
+
+        const userTier = localStorage.getItem("moments_user_tier") || "free";
+        const badge = document.getElementById("sidebar-tier-badge");
+        if (badge) {
+          badge.innerText = userTier.toUpperCase();
+          if (userTier === 'pro') {
+            badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20";
+          } else if (userTier === 'enterprise') {
+            badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30";
+          } else {
+            badge.className = "px-2 py-0.5 rounded text-[9px] uppercase font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/25";
+          }
+        }
+        
+        const usernameDisplay = localStorage.getItem("moments_authenticated_user_name") || "Cipherous";
+        if (document.getElementById("sidebar-username")) {
+          document.getElementById("sidebar-username").innerText = usernameDisplay;
+        }
+
+        await fetchUserContent();
+      } catch (err) {
+        console.error("Critical Profile Mapping Fault:", err);
+      }
+    }
+
+    async function fetchUserContent() {
+      try {
+        const storiesQuery = query(collection(db, "stories"), where("authorId", "==", activeUserId));
+        const storiesSnap = await getDocs(storiesQuery);
+        const storiesCount = storiesSnap.size;
+        
+        counterStories.textContent = storiesCount;
+        tabCountStories.textContent = storiesCount;
+        
+        if (storiesCount === 0) {
+          storiesContainer.innerHTML = `<div class="bento-glass rounded-3xl text-center py-16 text-xs font-mono text-slate-500 border border-hairline">No stories shared under this connection array.</div>`;
+        } else {
+          storiesContainer.innerHTML = "";
+          storiesSnap.forEach(postDoc => {
+            const story = postDoc.data();
+            const dateText = story.createdAt ? new Date(story.createdAt.seconds * 1000).toLocaleDateString() : "Live Stream";
+            
+            const article = document.createElement("article");
+            article.className = "bento-glass rounded-3xl p-6 sm:p-8 space-y-4 border border-hairline transition-all duration-300 hover:border-accent/40 shadow-xl";
+            article.innerHTML = `
+              <p class="text-sm text-slate-200 font-light italic leading-relaxed">"${story.content || ''}"</p>
+              <div class="flex items-center justify-between pt-4 border-t border-hairline">
+                <span class="text-[10px] text-slate-500 font-mono"></span>
+                <span class="text-[10px] text-accent font-mono">${dateText}</span>
+              </div>
+            `;
+            storiesContainer.appendChild(article);
+          });
+        }
+
+        const momentsQuery = query(collection(db, "moments"), where("creatorId", "==", activeUserId));
+        const momentsSnap = await getDocs(momentsQuery);
+        const momentsCount = momentsSnap.size;
+        
+        counterMoments.textContent = momentsCount;
+        tabCountMoments.textContent = momentsCount;
+
+        if (momentsCount === 0) {
+          momentsContainer.innerHTML = `<div class="bento-glass rounded-3xl text-center py-16 text-xs font-mono text-slate-500 border border-hairline">No architectural channels initiated by this node.</div>`;
+        } else {
+          momentsContainer.innerHTML = "";
+          momentsSnap.forEach(mDoc => {
+            const moment = mDoc.data();
+            const article = document.createElement("article");
+            article.className = "bento-glass rounded-3xl p-6 sm:p-8 space-y-4 border border-hairline transition-all duration-300 hover:border-accent/40 shadow-xl";
+            article.innerHTML = `
+              <h3 class="font-heading text-lg font-semibold text-white tracking-tight">${moment.title || 'Untitled Space'}</h3>
+              <p class="text-xs text-slate-400 font-light leading-relaxed">${moment.description || 'No description provided.'}</p>
+              <div class="pt-4 border-t border-hairline flex items-center justify-between">
+                <span class="text-[10px] text-slate-500 font-mono uppercase">Framework Channel</span>
+                <span class="w-2 h-2 rounded-full bg-accent"></span>
+              </div>
+            `;
+            momentsContainer.appendChild(article);
+          });
+        }
+      } catch (err) {
+        console.error("Content Stream Mapping Error:", err);
+      }
+    }
+
+    function destructAuthentication() {
+      localStorage.removeItem("moments_authenticated_user_id");
+      localStorage.removeItem("moments_authenticated_user_name");
+      localStorage.removeItem("moments_user_tier");
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("logout-btn-desktop").addEventListener("click", destructAuthentication);
+    const logoutBtnMobile = document.getElementById("logout-btn-mobile");
+    if (logoutBtnMobile) logoutBtnMobile.addEventListener("click", destructAuthentication);
+
+    document.addEventListener("DOMContentLoaded", loadProfileNode);
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
+  </script>
+</body>
+</html>
