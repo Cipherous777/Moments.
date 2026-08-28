@@ -95,10 +95,10 @@
     <div class="space-y-2 text-center">
       <div class="inline-flex items-center gap-2.5 mx-auto">
         <span class="w-2.5 h-2.5 bg-accent rounded-sm animate-pulse"></span>
-        <span class="text-xs font-bold tracking-widest uppercase text-white">Moments Network</span>
+        <span class="text-xs font-bold tracking-widest uppercase text-white">Moments </span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-2">Initialize Profile</h1>
-      <p class="text-xs text-slate-400 font-light tracking-wide">Enter a display name and a unique 7-digit numerical code passcode to secure your reflections.</p>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-2">Create account</h1>
+      <p class="text-xs text-slate-400 font-light tracking-wide">Create your account by usernames and passcodes.</p>
     </div>
 
     <!-- ERROR BANNER TARGET -->
@@ -112,13 +112,13 @@
       
       <!-- NAME FIELD -->
       <div class="space-y-1.5">
-        <label for="user-name" class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Display Name</label>
+        <label for="user-name" class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Username</label>
         <input 
           type="text" 
           id="user-name" 
           required 
           autocomplete="off"
-          placeholder="e.g., Anonymous Contributor" 
+          placeholder="xxx" 
           class="w-full bg-night border border-hairline p-3.5 text-xs text-white rounded-xl focus:outline-none focus:border-accent/60 transition-colors placeholder:text-slate-600"
         >
       </div>
@@ -139,10 +139,8 @@
         <span class="text-[9px] font-mono text-slate-500 block pt-0.5">Must consist explicitly of digits 0-9.</span>
       </div>
 
-      <!-- PRIVACY DISCLAIMER -->
-      <p class="text-[10px] text-slate-500 font-light italic leading-relaxed text-center pt-2">
-        Zero metrics tracked. Passcode values are cryptographically layered into local runtime streams.
-      </p>
+     
+      
 
       <!-- SUBMIT TRANSACTION BUTTON -->
       <button 
@@ -150,7 +148,7 @@
         id="submit-btn" 
         class="w-full py-3.5 bg-accent text-btntext text-xs font-semibold uppercase tracking-wider rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg shadow-accent/10"
       >
-        <span>Establish Account Connection</span>
+        <span>Create account</span>
       </button>
 
     </form>
@@ -158,8 +156,8 @@
     <!-- ALTERNATIVE ROUTING ACCORDION -->
     <div class="pt-4 border-t border-hairline text-center">
       <p class="text-[11px] text-slate-400">
-        Already registered inside the matrix? 
-        <a href="login.html" class="text-accent font-medium hover:underline ml-1">Authenticate Identity</a>
+        Already have an account?
+        <a href="login.html" class="text-accent font-medium hover:underline ml-1">Log-in</a>
       </p>
     </div>
 
