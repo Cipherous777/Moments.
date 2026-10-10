@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service | Moments by Ciphree</title>
+  <meta name="description" content="Terms of Service for Moments, the intentional connection platform by Ciphree.">
+  <meta name="theme-color" content="#2563EB">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: {
+      fontFamily: { heading: ['"Clash Display"','sans-serif'], body: ['"Clash Display"','sans-serif'] },
+      colors: { night:'var(--bg-night)', surface:'var(--bg-surface)', hairline:'var(--border-hairline)', accent:'var(--accent-color)', btntext:'var(--btn-text)' }
+    } } }
+  </script>
+  <style>
+    :root, .theme-sapphire { --bg-night:#030508; --bg-surface:#090D14; --border-hairline:#161F30; --accent-color:#2563EB; --accent-hover:#1D4ED8; --btn-text:#FFFFFF; --text-main:#E2E8F0; }
+    .theme-monochrome { --bg-night:#080808; --bg-surface:#121212; --border-hairline:#282828; --accent-color:#F5F5F5; --accent-hover:#E5E5E5; --btn-text:#000000; --text-main:#F5F5F5; }
+    .theme-emerald { --bg-night:#020D0A; --bg-surface:#061814; --border-hairline:#0D332B; --accent-color:#059669; --accent-hover:#047857; --btn-text:#FFFFFF; --text-main:#ECFDF5; }
+    .theme-nordic { --bg-night:#0B0F19; --bg-surface:#111827; --border-hairline:#1F2937; --accent-color:#06B6D4; --accent-hover:#0891B2; --btn-text:#000000; --text-main:#F3F4F6; }
+    body { background-color:var(--bg-night); color:var(--text-main); font-family:'Clash Display',sans-serif; overflow-x:hidden; transition:background-color .4s ease,color .4s ease,border-color .4s ease; }
+    h1,h2,h3 { font-family:'Clash Display',sans-serif; letter-spacing:-0.02em; }
+    .bg-grid-pattern { background-size:40px 40px; background-image:linear-gradient(to right,rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.025) 1px,transparent 1px); }
+    .btn-accent { background-color:var(--accent-color)!important; color:var(--btn-text)!important; transition:all .3s ease; }
+    .btn-accent:hover { background-color:var(--accent-hover)!important; }
+    .legal h2 { font-family:'Clash Display',sans-serif; color:#fff; font-size:1.2rem; font-weight:700; margin:2.2rem 0 .7rem; padding-top:1.6rem; border-top:1px solid var(--border-hairline); }
+    .legal p, .legal li { font-size:.9rem; line-height:1.85; color:#94a3b8; }
+    .legal ul { list-style:none; margin:.7rem 0; display:grid; gap:.5rem; }
+    .legal li { padding-left:1.1rem; position:relative; }
+    .legal li::before { content:""; position:absolute; left:0; top:.8em; width:5px; height:5px; background:var(--accent-color); }
+    .legal strong { color:#fff; font-weight:600; }
+    .legal a { color:var(--accent-color); text-decoration:underline; text-underline-offset:3px; }
+  </style>
+</head>
+<body class="theme-sapphire min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white antialiased bg-grid-pattern">
+  <header class="border-b border-hairline sticky top-0 z-50 bg-night/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 bg-accent"></span>
+        <span class="font-heading text-xl font-bold tracking-widest text-white uppercase">Moments</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-widest text-slate-400">
+        <a href="/#uniqueness" class="hover:text-white transition-colors">Why Unique</a>
+        <a href="/#pricing" class="hover:text-white transition-colors">Pricing ($ USD)</a>
+        <a href="/#faq" class="hover:text-white transition-colors">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <button onclick="cycleTheme()" class="hidden sm:flex px-3.5 py-2 border border-hairline bg-surface text-[10px] font-mono uppercase tracking-widest text-slate-300 hover:text-white transition-all items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          <span>Theme: <strong id="theme-indicator" class="text-white">Sapphire</strong></span>
+        </button>
+        <a href="/" class="px-5 py-2.5 btn-accent text-xs font-bold uppercase tracking-wider">Home</a>
+      </div>
+    </div>
+  </header>
+  <main class="flex-grow relative z-10">
+    <article class="max-w-3xl mx-auto px-6 py-20">
+      <div class="inline-flex items-center gap-3 px-3 py-1 border border-hairline bg-surface text-accent text-xs font-semibold uppercase tracking-widest mb-8">
+        <span class="w-2 h-2 bg-accent"></span> Legal
+      </div>
+      <h1 class="font-heading text-4xl sm:text-5xl font-bold text-white leading-[1.05] tracking-tight mb-4">Terms of Service</h1>
+      <p class="text-xs font-mono uppercase tracking-widest text-slate-500 mb-10">Last updated: October 10, 2026</p>
+      <div class="legal">
+<p>These Terms govern your use of Moments (moments.ciphree.com.et), operated by Ciphree ("we", "us") from Ethiopia. By creating an account or using Moments, you agree to them.</p>
+<h2>1. Eligibility</h2><p>You must be at least 18 years old. By using Moments you confirm you are, and that you can form a binding agreement.</p>
+<h2>2. Your account</h2><p>You may use a pen name. You are responsible for your login credentials and everything done under your account. Give us accurate sign-up information, such as a working email address.</p>
+<h2>3. What Moments is</h2><p>Moments is a web app (installable as a PWA) where users share "Moments" (point-of-view posts), reply with "Stories", and connect 1-on-1 through opt-in chat. There are no public likes, view counts, or algorithmic feeds.</p>
+<h2>4. Plans and billing</h2>
+<ul><li><strong>Free Starter:</strong> $0, with daily posting and reply limits.</li><li><strong>Premium:</strong> $19 USD per month.</li><li><strong>Pro Unlimited:</strong> $29 USD per month.</li></ul>
+<p>Paid plans are monthly subscriptions that renew automatically until cancelled. Our order process is handled by our payment partner and Merchant of Record, <a href="https://www.paddle.com" rel="noopener">Paddle</a>, which processes payments, collects applicable taxes, and issues receipts. Paddle's <a href="https://www.paddle.com/legal/checkout-buyer-terms" rel="noopener">checkout buyer terms</a> apply to your purchase. You can cancel anytime; cancellation takes effect at the end of the current billing period. See our <a href="refund.html">Refund Policy</a>. We may change prices or features with advance notice, and changes apply from your next renewal.</p>
+<h2>5. Your content</h2><p>You keep ownership of what you post. You grant us a limited, worldwide licence to host, display, and deliver it within Moments so the service can work. You are responsible for your content and confirm you have the right to share it.</p>
+<h2>6. Acceptable use</h2><p>Do not harass, threaten, or impersonate others; post unlawful, hateful, sexually exploitative, or violent content; share other people's private information; spam or scam; scrape or abuse the service; or try to break or bypass its security or plan limits.</p>
+<h2>7. Chat matchmaking</h2><p>Chats are 1-on-1 and opt-in. Either person can leave at any time. Be careful about what you share with people you meet through Moments. You can report misuse to us.</p>
+<h2>8. Monami (AI)</h2><p>Where available, Monami helps improve clarity and suggest ideas. It may make mistakes and does not replace professional advice.</p>
+<h2>9. Suspension and termination</h2><p>We may suspend or remove accounts or content that breach these Terms or put others at risk. You may stop using Moments and delete your account at any time.</p>
+<h2>10. Disclaimers and liability</h2><p>Moments is provided "as is" and "as available", without guarantees of uninterrupted or error-free operation. To the extent the law allows, Ciphree is not liable for indirect or consequential losses, and our total liability for any claim is limited to the amount you paid us in the 3 months before the claim.</p>
+<h2>11. Changes</h2><p>We may update these Terms. Material changes will be posted here with a new date, and continued use means you accept them.</p>
+<h2>12. Governing law</h2><p>These Terms are governed by the laws of Ethiopia, without affecting any mandatory consumer rights in your country.</p>
+<h2>13. Contact</h2><p><a href="mailto:YOUR_EMAIL@ciphree.com.et">YOUR_EMAIL@ciphree.com.et</a></p>
+      </div>
+    </article>
+  </main>
+  <footer class="border-t border-hairline py-10 px-6 lg:px-12 text-xs text-slate-500 bg-night">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>© 2026 Ciphree • Moments Social Platform</div>
+      <div class="flex flex-wrap justify-center gap-6">
+        <a href="/#pricing" class="hover:text-white">Pricing</a>
+        <a href="/#faq" class="hover:text-white">FAQ</a>
+        <a href="terms.html" class="hover:text-white">Terms</a>
+        <a href="privacy.html" class="hover:text-white">Privacy</a>
+        <a href="refund.html" class="hover:text-white">Refunds</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    const themes = [{id:"theme-sapphire",name:"Sapphire"},{id:"theme-monochrome",name:"Monochrome"},{id:"theme-emerald",name:"Emerald"},{id:"theme-nordic",name:"Nordic"}];
+    let themeIndex = 0;
+    function cycleTheme() {
+      document.body.classList.remove(themes[themeIndex].id);
+      themeIndex = (themeIndex + 1) % themes.length;
+      document.body.classList.add(themes[themeIndex].id);
+      document.getElementById("theme-indicator").textContent = themes[themeIndex].name;
+    }
+  </script>
+</body>
+</html>

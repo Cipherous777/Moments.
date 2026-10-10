@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | Moments by Ciphree</title>
+  <meta name="description" content="Privacy Policy for Moments, the intentional connection platform by Ciphree.">
+  <meta name="theme-color" content="#2563EB">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: {
+      fontFamily: { heading: ['"Clash Display"','sans-serif'], body: ['"Clash Display"','sans-serif'] },
+      colors: { night:'var(--bg-night)', surface:'var(--bg-surface)', hairline:'var(--border-hairline)', accent:'var(--accent-color)', btntext:'var(--btn-text)' }
+    } } }
+  </script>
+  <style>
+    :root, .theme-sapphire { --bg-night:#030508; --bg-surface:#090D14; --border-hairline:#161F30; --accent-color:#2563EB; --accent-hover:#1D4ED8; --btn-text:#FFFFFF; --text-main:#E2E8F0; }
+    .theme-monochrome { --bg-night:#080808; --bg-surface:#121212; --border-hairline:#282828; --accent-color:#F5F5F5; --accent-hover:#E5E5E5; --btn-text:#000000; --text-main:#F5F5F5; }
+    .theme-emerald { --bg-night:#020D0A; --bg-surface:#061814; --border-hairline:#0D332B; --accent-color:#059669; --accent-hover:#047857; --btn-text:#FFFFFF; --text-main:#ECFDF5; }
+    .theme-nordic { --bg-night:#0B0F19; --bg-surface:#111827; --border-hairline:#1F2937; --accent-color:#06B6D4; --accent-hover:#0891B2; --btn-text:#000000; --text-main:#F3F4F6; }
+    body { background-color:var(--bg-night); color:var(--text-main); font-family:'Clash Display',sans-serif; overflow-x:hidden; transition:background-color .4s ease,color .4s ease,border-color .4s ease; }
+    h1,h2,h3 { font-family:'Clash Display',sans-serif; letter-spacing:-0.02em; }
+    .bg-grid-pattern { background-size:40px 40px; background-image:linear-gradient(to right,rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.025) 1px,transparent 1px); }
+    .btn-accent { background-color:var(--accent-color)!important; color:var(--btn-text)!important; transition:all .3s ease; }
+    .btn-accent:hover { background-color:var(--accent-hover)!important; }
+    .legal h2 { font-family:'Clash Display',sans-serif; color:#fff; font-size:1.2rem; font-weight:700; margin:2.2rem 0 .7rem; padding-top:1.6rem; border-top:1px solid var(--border-hairline); }
+    .legal p, .legal li { font-size:.9rem; line-height:1.85; color:#94a3b8; }
+    .legal ul { list-style:none; margin:.7rem 0; display:grid; gap:.5rem; }
+    .legal li { padding-left:1.1rem; position:relative; }
+    .legal li::before { content:""; position:absolute; left:0; top:.8em; width:5px; height:5px; background:var(--accent-color); }
+    .legal strong { color:#fff; font-weight:600; }
+    .legal a { color:var(--accent-color); text-decoration:underline; text-underline-offset:3px; }
+  </style>
+</head>
+<body class="theme-sapphire min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white antialiased bg-grid-pattern">
+  <header class="border-b border-hairline sticky top-0 z-50 bg-night/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 bg-accent"></span>
+        <span class="font-heading text-xl font-bold tracking-widest text-white uppercase">Moments</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-widest text-slate-400">
+        <a href="/#uniqueness" class="hover:text-white transition-colors">Why Unique</a>
+        <a href="/#pricing" class="hover:text-white transition-colors">Pricing ($ USD)</a>
+        <a href="/#faq" class="hover:text-white transition-colors">FAQ</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <button onclick="cycleTheme()" class="hidden sm:flex px-3.5 py-2 border border-hairline bg-surface text-[10px] font-mono uppercase tracking-widest text-slate-300 hover:text-white transition-all items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          <span>Theme: <strong id="theme-indicator" class="text-white">Sapphire</strong></span>
+        </button>
+        <a href="/" class="px-5 py-2.5 btn-accent text-xs font-bold uppercase tracking-wider">Home</a>
+      </div>
+    </div>
+  </header>
+  <main class="flex-grow relative z-10">
+    <article class="max-w-3xl mx-auto px-6 py-20">
+      <div class="inline-flex items-center gap-3 px-3 py-1 border border-hairline bg-surface text-accent text-xs font-semibold uppercase tracking-widest mb-8">
+        <span class="w-2 h-2 bg-accent"></span> Legal
+      </div>
+      <h1 class="font-heading text-4xl sm:text-5xl font-bold text-white leading-[1.05] tracking-tight mb-4">Privacy Policy</h1>
+      <p class="text-xs font-mono uppercase tracking-widest text-slate-500 mb-10">Last updated: October 10, 2026</p>
+      <div class="legal">
+<p>This policy explains what Moments (operated by Ciphree) collects, why, and the choices you have. We don't sell your data and we don't run ads.</p>
+<h2>1. What we collect</h2>
+<ul><li><strong>Account data:</strong> email address, pen name, and login details.</li><li><strong>Content:</strong> Moments, Stories, and chat messages you send.</li><li><strong>Usage and device data:</strong> basic technical information (browser, device type, app events) needed to run and secure the service.</li><li><strong>Subscription data:</strong> your plan and billing status. Payments are handled by Paddle; we never see or store your full card details.</li></ul>
+<h2>2. How we use it</h2><p>To run Moments, authenticate you, enable matchmaking and chat, apply plan limits, process subscriptions, prevent abuse, provide support, and improve the product. Matchmaking uses the topics and interests you submit to pair you with others.</p>
+<h2>3. Who processes it</h2>
+<ul><li><strong>Google Firebase</strong> for authentication, database, and hosting of app data.</li><li><strong>Paddle</strong>, our Merchant of Record, for payments, taxes, and invoices. Paddle acts as an independent controller of your billing data under its <a href="https://www.paddle.com/legal/privacy" rel="noopener">privacy policy</a>.</li><li><strong>Cloudflare and GitHub Pages</strong> for DNS and site delivery.</li></ul>
+<p>We share data only with these providers as needed to operate the service, or when the law requires it. Your data may be processed in countries other than your own.</p>
+<h2>4. Pseudonyms and visibility</h2><p>You can use a pen name. Your Moments and Stories are visible to other users as the service allows; chats are visible only to the participants. Don't post information you wouldn't want others to see.</p>
+<h2>5. Retention</h2><p>We keep your data while your account is active. When you delete your account we remove or anonymise your personal data, except what we must keep for legal, tax, or security reasons.</p>
+<h2>6. Your rights</h2><p>You can access, correct, export, or delete your data by contacting us. If privacy law in your region gives you further rights, we will honour them.</p>
+<h2>7. Cookies and local storage</h2><p>We use only essential cookies and local storage for sign-in, preferences, and security. We don't use advertising trackers.</p>
+<h2>8. Security</h2><p>We use reasonable technical measures, but no system is completely secure.</p>
+<h2>9. Children</h2><p>Moments is for people 18 and over. If we learn that a younger person has an account, we will delete it.</p>
+<h2>10. Changes</h2><p>We will post updates here with a new date.</p>
+<h2>11. Contact</h2><p><a href="mailto:YOUR_EMAIL@ciphree.com.et">YOUR_EMAIL@ciphree.com.et</a></p>
+      </div>
+    </article>
+  </main>
+  <footer class="border-t border-hairline py-10 px-6 lg:px-12 text-xs text-slate-500 bg-night">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div>© 2026 Ciphree • Moments Social Platform</div>
+      <div class="flex flex-wrap justify-center gap-6">
+        <a href="/#pricing" class="hover:text-white">Pricing</a>
+        <a href="/#faq" class="hover:text-white">FAQ</a>
+        <a href="terms.html" class="hover:text-white">Terms</a>
+        <a href="privacy.html" class="hover:text-white">Privacy</a>
+        <a href="refund.html" class="hover:text-white">Refunds</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    const themes = [{id:"theme-sapphire",name:"Sapphire"},{id:"theme-monochrome",name:"Monochrome"},{id:"theme-emerald",name:"Emerald"},{id:"theme-nordic",name:"Nordic"}];
+    let themeIndex = 0;
+    function cycleTheme() {
+      document.body.classList.remove(themes[themeIndex].id);
+      themeIndex = (themeIndex + 1) % themes.length;
+      document.body.classList.add(themes[themeIndex].id);
+      document.getElementById("theme-indicator").textContent = themes[themeIndex].name;
+    }
+  </script>
+</body>
+</html>
